@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="./scripts/d3.js"></script>
+    <script type="text/javascript" src="./scripts/d3.csv.js"></script>
+    <script type="text/javascript" src="./scripts/d3.geo.js"></script>
+    <script type="text/javascript" src="./scripts/d3.geom.js"></script>
+    <script type="text/javascript" src="./scripts/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./scripts/bootbox.min.js"></script>
+    <script type="text/javascript" src="./slider/js/bootstrap-slider.js"></script>
+    <script type="text/javascript" src="./scripts/jquery.qtip.min.js"></script>
+    <script type="text/javascript" src="./scripts/bootstrap-tour.min.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="./bootstrap/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="./bootstrap/css/bootstrap-theme.min.css"/>
+    <link type="text/css" href="./css/jumbotron-narrow.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="./slider/css/slider.css" rel="stylesheet">
+    <link type="text/css" href="./css/jquery.qtip.min.css" rel="stylesheet">
+    <link type="text/css" href="./css/bootstrap-tour.min.css" rel="stylesheet">
+
+    <style type="text/css">
+
+      #states path {
+        fill: #ccc;
+        stroke: #fff;
+      }
+
+      path.arc {
+        pointer-events: none;
+        fill: none;
+        stroke: #000;
+        display: all;
+        opacity:0.1;
+      }
+
+      path.cell {
+        fill: none;
+        pointer-events: all;
+      }
+
+      circle {
+        fill: steelblue;
+        fill-opacity: .8;
+        stroke: #fff;
+      }
+
+      #cells.voronoi path.cell {
+        stroke: brown;
+      }
+
+      th.first {
+        text-align:center;
+        vertical-align:middle;
+        background-color:#deebf7
+      }
+
+      th.second {
+        text-align:center;
+        vertical-align:middle;
+        background-color:#e8e8e8
+      }
+
+      td.first {
+        text-align:center;
+        vertical-align:middle;
+        background-color:#9ecae1
+        
+      }
+
+      td.second {
+        text-align:center;
+        vertical-align:middle;
+        background-color:#bfbfbf
+      }
+
+
+    </style>
+    <title>Communication network</title>
+  </head>
+  <body>
+     <div class="container">
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="./">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        <h3 class="text-muted"><strong>Network</strong><em>Challenge</em></h3>
+      </div>
+      <div class="jumbotron" id="jumbotron">
+        <div class="row">
+          <div class="col-md-12">
+            <h1>Can you create a robust communication network?</h1>
+            <p class="lead">Build a communication network that withstands random connection failures.</p>
+             <p><a class="btn btn-lg btn-success" href="#" role="button" id="go">Give it a try!</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="row marketing" id="bottom_row">
+        <div class="col-md-6">
+          <h4>What is robustness?</h4>
+          <p>Robustness is <i>'the ability of a system to resist change without adapting its initial stable configuration.'</i> Basically, it's the abilitiy of a system to keep doing what it's supposed to do, even if there is a problem.</p>
+        </div>
+
+        <div class="col-md-6">
+          <h4>Why is robustness important?</h4>
+          <p>It's super important.</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>&copy; Aaron Brooks 2014</p>
+      </div>
+
+    </div> <!-- /container -->
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $("#go").click(function (e) {
+            $("body").load("game.html");
+          });
+          $("#go").qtip({ // Grab some elements to apply the tooltip to
+              content: 'Click here',
+              position: {
+                my: 'left center',
+                at: 'right center',
+                target: '#go'
+              },
+              style: {
+                classes: 'qtip-blue qtip-shadow qtip-rounded'
+              },
+              show: {
+                when:false,
+                ready:true,
+                delay:1000
+              },
+              hide: {
+                event: "click"
+              }
+          });
+          navigator.sayswho= (function(){
+            var ua= navigator.userAgent, tem, 
+              M= ua.match(/(opera|msie|trident(?=\/))\/?\s*([\d\.]+)/i) || [];
+              if(/trident/i.test(M[1])){
+                  tem=  /\brv[ :]+(\d+(\.\d+)?)/g.exec(ua) || [];
+                  return 'IE '+(tem[1] || '');
+              }
+              M= M[2]? [M[1], M[2]]:[navigator.appName, navigator.appVersion, '-?'];
+              if((tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+              return M.join(' ');
+            })();
+          var isitbad = navigator.sayswho.match(/(opera|msie|trident(?=\/))\/?\s*([\d\.]+)/i) || [];
+          if(isitbad.length>0) {
+            alert("WARNING! "+navigator.sayswho+" has not been tested. For best results, please use Firefox, Chrome, or Safari.")
+          } 
+        });
+        // Extend jQuery for regexp
+        jQuery.expr[':'].regex = function(elem, index, match) {
+            var matchParams = match[3].split(','),
+                validLabels = /^(data|css):/,
+                attr = {
+                    method: matchParams[0].match(validLabels) ? 
+                                matchParams[0].split(':')[0] : 'attr',
+                    property: matchParams.shift().replace(validLabels,'')
+                },
+                regexFlags = 'ig',
+                regex = new RegExp(matchParams.join('').replace(/^\s+|\s+$/g,''), regexFlags);
+            return regex.test(jQuery(elem)[attr.method](attr.property));
+        }
+    </script>
+  </body>
+</html>

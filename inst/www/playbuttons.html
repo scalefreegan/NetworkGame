@@ -1,0 +1,35 @@
+
+<button type="button" class="btn btn-default btn-lg" id="speed_down" style="padding:4px 14px">
+		<span class="glyphicon glyphicon-circle-arrow-down"></span>
+</button>
+<button type="button" class="btn btn-default btn-lg" id="play" style="padding:4px 14px">
+		<span class="glyphicon glyphicon-play"></span>
+</button>
+<button type="button" class="btn btn-default btn-lg" id="stop" style="padding:4px 14px">
+		<span class="glyphicon glyphicon-pause"></span>
+</button>
+<button type="button" class="btn btn-default btn-lg" id="speed_up" style="padding:4px 14px">
+		<span class="glyphicon glyphicon-circle-arrow-up"></span>
+</button>
+
+<script>
+	$("#play").click(function(){
+		$('#play').prop("disabled",true);
+		$('#stop').prop("disabled",false);
+		window.run = true;
+		//debugger;
+		start(window.index_g,cities_data,graph_data);
+	});
+	$("#stop").click(function(){
+		$('#stop').prop("disabled",true);
+		$('#play').prop("disabled",false);
+		window.run = false;
+	});
+	$("#speed_up").click(function(){
+		$("#speed").val(parseInt($("#speed").val())+5+"%");
+	});
+	$("#speed_down").click(function(){
+		$("#speed").val(parseInt($("#speed").val())-5+"%");
+	});
+	$('#play').prop("disabled",true);
+</script>

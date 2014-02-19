@@ -1,0 +1,34 @@
+<button type='button' class='btn btn-danger' id='score_network'>Score</button>
+
+<script>
+// $("#go_network").qtip({ // Grab some elements to apply the tooltip to
+//             content: 'Click here when you are ready',
+//             position: {
+//               my: 'right center',
+//               at: 'left center',
+//               target: '#go_network'
+//             },
+//             style: {
+//               classes: 'qtip-blue qtip-shadow qtip-rounded'
+//             },
+//             show: {
+//               when:false,
+//               ready:true,
+//               delay:2000
+//             },
+//             hide: {
+//               event: "click"
+//             }
+//       });
+$("#score_network").click(function () {
+            //disable the go button
+            $('#playbuttons').load("playbuttons.html");
+            //debugger;
+            $('#go_network').prop("disabled",true);
+            $('#play').prop("disabled",true);
+            //clearGraph();
+            //debugger;
+            //start(101,cities_data,graph_data);
+            score((cities_data.length+1));
+      });
+</script>

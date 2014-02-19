@@ -1,0 +1,23 @@
+<p>Age</p>
+<svg id="option3" style="background: none repeat scroll 0% 0% white;" width = "100px" height = "100px" viewBox="0 0 1 1" perserveAspectRatio="xMidYMid meet"></svg>
+<div><input type="text" value="50" id="sl3" ></div>
+<script>
+$('#sl3').slider({
+          formater: function(value) {
+          	var importance = "not working";
+          	if (value<25) {
+          		importance = "Unimportant";
+          	}
+          	else if (value>=25 && value<=75) {
+          		importance = "Somewhat Important";
+          	}
+          	else if (value>75) {
+          		importance = "Very Important";
+          	}
+            return 'Value: ' + value+', '+importance;
+          },
+          min: 0,
+          max: 100,
+          value: 50
+        });
+</script>

@@ -1,0 +1,23 @@
+<p>Chance</p>
+<svg id="option1" style="background: none repeat scroll 0% 0% white;" width = "100px" height = "100px" viewBox="0 0 1 1" perserveAspectRatio="xMidYMid meet"></svg>
+<div><input type="text" value="50" id="sl1" ></div>
+<script>
+$('#sl1').slider({
+          formater: function(value) {
+          	var importance = "not working";
+          	if (value<25) {
+          		importance = "Determined";
+          	}
+          	else if (value>=25 && value<=75) {
+          		importance = "Some Chance";
+          	}
+          	else if (value>75) {
+          		importance = "Chance";
+          	}
+            return 'Value: ' + value+', '+importance;
+          },
+          min: 0,
+          max: 100,
+          value: 50
+        });
+</script>
