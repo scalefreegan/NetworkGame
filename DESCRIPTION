@@ -1,13 +1,14 @@
-Package: mapapp
+Package: NetworkGame
 Type: OpenCPU Application
 Title: create basic country maps
 Version: 0.1
 Date: 2013-09-04
-Author: Jeroen Ooms
+Author: Aaron Brooks
 Maintainer: Jeroen <jeroenooms@gmail.com>
 Description: create basic country maps
 License: Apache2
 LazyData: true
 Imports:
-    rworldmap
-Suggests: opencpu (>= 1.0.1)
+    igraph
+Suggests:
+    opencpu (>= 1.0.1)
