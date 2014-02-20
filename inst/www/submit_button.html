@@ -28,7 +28,7 @@ $("#go_network").click(function () {
             $('#play').prop("disabled",true);
             //here's where i need to run the r stuff
             var req = ocpu.call("run", {
-		        n : 1000,
+		        n : 150,
 		        chance : parseInt($("#sl1").attr("value")), 
 		        popularity : parseInt($("#sl2").attr("value")),
 		        age : parseInt($("#sl3").attr("value")),
@@ -42,7 +42,7 @@ $("#go_network").click(function () {
 		    function datainfo(callback){
 		    	ocpu.rpc("write", {x : dataframe}, function(jsondata){
 			      graph = jsondata;
-			      callback(999,start);
+			      callback(140,start);
 			    }).fail(function(jqXHR){
 			      alert(jqXHR.responseText);
 			    });
