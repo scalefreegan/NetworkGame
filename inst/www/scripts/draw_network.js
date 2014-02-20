@@ -8,7 +8,7 @@
     g_index = 0,
     t_time = 200,
     run = true,
-    graph_data,
+    graph,
     cities_data;
 
 var cityNetwork = [],
@@ -309,7 +309,7 @@ function cityDataParse(where,graph,callback) {
         links_t.push({source: cityNetwork[target].city, target: cityNetwork[source].city});
         links_s.push({source: cityNetwork[source].city, target: cityNetwork[target].city});
       });
-      callback(where,cities_data,graph_data);
+      callback(where,cities_data,graph);
     });
 }
 
@@ -427,7 +427,7 @@ function score(where) {
       clearTimeout(t3);
     }
   }
-  runItAll(graph_data);
+  runItAll(graph);
 }
 
 function isItNew(cities,link){
