@@ -1,4 +1,4 @@
 export(makeGraph)
 export(runGame)
 export(run)
-export(write)
+export(writeJSON)
