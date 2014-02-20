@@ -44,7 +44,7 @@ $("#go_network").click(function () {
 			      graph_data = jsondata;
 			    }).fail(function(jqXHR){
 			      alert(jqXHR.responseText);
-			    }).always(function(){
+			    }).done(function(){
 		        	callback(99,graph_data,start);    
 		      	});
 		    }
