@@ -40,7 +40,7 @@ $("#go_network").click(function () {
 		        alert(jqXHR.responseText);
 		      });
 		    function datainfo(callback){
-		    	ocpu.rpc("write", {x : dataframe}, function(jsondata){
+		    	ocpu.rpc("writeJSON", {x : dataframe}, function(jsondata){
 			      graph = jsondata;
 			      callback(140,start);
 			    }).fail(function(jqXHR){
