@@ -256,7 +256,7 @@ function start(where,cities,graph) {
 }
 
 function cityDataParse(where,callback) {
-  //debugger;
+  debugger;
   d3.csv("./data/uscitiespop.csv", function(cities) {
       debugger;
       // reduce size of cities

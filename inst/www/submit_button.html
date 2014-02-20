@@ -34,17 +34,14 @@ $("#go_network").click(function () {
 		        age : parseInt($("#sl3").attr("value")),
 		        nRuns: 100    
 		      }, function(session){
-		      	debugger;
 		        dataframe = session;
 		        datainfo();
 		      }).fail(function(jqXHR){
-		      	debugger;
 		        alert(jqXHR.responseText);
 		      });
 		    function datainfo(){
 		    	return ocpu.rpc("write", {x : dataframe}, function(jsondata){
 			      graph_data = jsondata;
-			      debugger;
 			    }).fail(function(jqXHR){
 			      alert(jqXHR.responseText);
 			    }).always(function(){
