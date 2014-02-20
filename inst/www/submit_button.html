@@ -42,9 +42,7 @@ $("#go_network").click(function () {
 		    function datainfo(callback){
 		    	ocpu.rpc("write", {x : dataframe}, function(jsondata){
 			      graph = jsondata;
-			      debugger;
-			    }, function(){
-			    	callback(99,start);
+			      callback(99,start);
 			    }).fail(function(jqXHR){
 			      alert(jqXHR.responseText);
 			    });
