@@ -255,12 +255,11 @@ function start(where,cities,graph) {
       startDraw();
 }
 
-function cityDataParse(where,callback) {
+function cityDataParse(where,graph,callback) {
   //debugger;
   d3.csv("./data/uscitiespop.csv", function(cities) {
       //debugger;
       // reduce size of cities
-      var graph = graph_data;
       cities = cities.slice(0,graph.names.length);
       for (var i = 0; i<cities.length; i++) {
         cities[i].age = cities.length-i;
