@@ -21,16 +21,16 @@ run <- function(n,chance,popularity,age,nRuns) {
 	to.r$results_score <- 1-(1/(k0-1))
 	# R. Cohen, K. Erez, D. ben-Avraham, S. Havlin Resilience of the Internet to random breakdowns Phys Rev Lett, 85 (2007), p. 4626
 	to.r$links <- makeAdjacencyMatrix(to.r$g)
-	writeToJSON <- function(x,filename) {
-		towrite <- list(
-			names = x$names,
-			links = as.data.frame(x$links),
-			game = x$results,
-			score = x$results_score
-			)
-		towrite <- toJSON(towrite, pretty=TRUE)
-		write(towrite,file=filename)
-	}
-	writeToJSON(to.r,"~/Desktop/graph.json")
+	# writeToJSON <- function(x,filename) {
+	# 	towrite <- list(
+	# 		names = x$names,
+	# 		links = as.data.frame(x$links),
+	# 		game = x$results,
+	# 		score = x$results_score
+	# 		)
+	# 	towrite <- toJSON(towrite, pretty=TRUE)
+	# 	write(towrite,file=filename)
+	# }
+	# writeToJSON(to.r,"~/Desktop/graph.json")
 	return(to.r)
 }
