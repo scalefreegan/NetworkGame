@@ -43,11 +43,11 @@ $("#go_network").click(function () {
 		    	ocpu.rpc("write", {x : dataframe}, function(jsondata){
 			      graph = jsondata;
 			      debugger;
+			    }, function(){
+			    	callback(99,start);
 			    }).fail(function(jqXHR){
 			      alert(jqXHR.responseText);
-			    }).done(function(){
-		        	callback(99,start);    
-		      	});
+			    });
 		    }
             //
       });

@@ -275,7 +275,7 @@ function cityDataParse(where,callback) {
         latitude:undefined,
         longitude:undefined
         };
-    })
+    });
     graph.links.forEach(function(link){
       var source = link.source,
           target = link.target;
