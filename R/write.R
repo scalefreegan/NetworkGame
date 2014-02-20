@@ -1,7 +1,7 @@
 write <- function(x) {
 	list(
 		names = x$names,
-		links = x$links,
+		links = as.data.frame(x$links),
 		game = x$results,
 		score = x$results_score
 		)
