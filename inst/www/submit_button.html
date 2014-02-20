@@ -26,6 +26,22 @@ $("#go_network").click(function () {
             //debugger;
             $('#go_network').prop("disabled",true);
             $('#play').prop("disabled",true);
-            cityDataParse(99,start);
+            //here's where i need to run the r stuff
+            var req = ocpu.call("runAndWrite", {
+		        n : 100,
+		        chance : parseInt($("#sl1").attr("value")), 
+		        popularity : parseInt($("#sl2").attr("value")),
+		        age : parseInt($("#sl3").attr("value")),
+		        nRuns: 100    
+		      }, function(session){
+		      	debugger;
+		        dataframe = session;
+		        //datainfo();
+		      }).fail(function(jqXHR){
+		        errormsg(jqXHR.responseText);
+		      }).always(function(){
+		        alert("oh yeah!");      
+		      });
+            //cityDataParse(99,start);
       });
 </script>
