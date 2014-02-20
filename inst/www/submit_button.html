@@ -28,7 +28,7 @@ $("#go_network").click(function () {
             $('#play').prop("disabled",true);
             //here's where i need to run the r stuff
             var req = ocpu.call("run", {
-		        n : 100,
+		        n : 1000,
 		        chance : parseInt($("#sl1").attr("value")), 
 		        popularity : parseInt($("#sl2").attr("value")),
 		        age : parseInt($("#sl3").attr("value")),
