@@ -258,9 +258,7 @@ function start(where,cities,graph) {
 function cityDataParse(where,callback) {
   //debugger;
   d3.csv("./data/uscitiespop.csv", function(cities) {
-    d3.json("./data/graph.json", function(graph){
-      graph_data = graph;
-      //debugger;
+      debugger;
       // reduce size of cities
       cities = cities.slice(0,graph.names.length);
       for (var i = 0; i<cities.length; i++) {
@@ -313,7 +311,6 @@ function cityDataParse(where,callback) {
       });
       callback(where,cities_data,graph_data);
     });
-  });
 }
 
 function clearGraph(){

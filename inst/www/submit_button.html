@@ -40,16 +40,17 @@ $("#go_network").click(function () {
 		      }).fail(function(jqXHR){
 		      	debugger;
 		        alert(jqXHR.responseText);
-		      }).always(function(){
-		        alert("oh yeah!");      
 		      });
 		    function datainfo(){
 		    	return ocpu.rpc("write", {x : dataframe}, function(jsondata){
+			      graph_data = jsondata;
 			      debugger;
 			    }).fail(function(jqXHR){
 			      alert(jqXHR.responseText);
-			    });
+			    }).always(function(){
+		        	  cityDataParse(99,start);    
+		      });
 		    }
-            //cityDataParse(99,start);
+            //
       });
 </script>
