@@ -1,4 +1,5 @@
 run <- function(n,chance,popularity,age,nRuns) {
+	require(jsonlite)
 	to.r <- list()
 	to.r$g <- makeGraph(n,chance,popularity,age)
 	to.r$names <- sapply(V(to.r$g)$names,toString)
@@ -16,7 +17,19 @@ run <- function(n,chance,popularity,age,nRuns) {
 	    return(conns)
 	}
 	to.r$results <- runGame(to.r$g,nRuns)
-	to.r$results_score <- score(to.r$results,nRuns)
+	k0 = (mean(degree(to.r$g)^2)/mean(degree(to.r$g)))
+	to.r$results_score <- 1-(1/(k0-1))
+	# R. Cohen, K. Erez, D. ben-Avraham, S. Havlin Resilience of the Internet to random breakdowns Phys Rev Lett, 85 (2007), p. 4626
 	to.r$links <- makeAdjacencyMatrix(to.r$g)
+	writeToJSON <- function(x,filename) {
+		towrite <- list(
+			names = x$names,
+			links = as.data.frame(x$links),
+			game = x$results,
+			score = x$results_score
+			)
+		write(towrite,file=filename)
+	}
+	writeToJSON(x,"~/Desktop/graph.json")
 	return(to.r)
 }
