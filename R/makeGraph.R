@@ -11,5 +11,6 @@ makeGraph <- function(n,chance,popularity,age) {
      out.dist = NULL, out.seq = NULL, out.pref = FALSE,
      directed = FALSE, zero.deg.appeal = 1, zero.age.appeal = 0,
      deg.coef = 1, age.coef = 1, time.window = NULL)
+	V(g)$names <- seq(0,length(V(g))-1)
 	return(g)
 }
