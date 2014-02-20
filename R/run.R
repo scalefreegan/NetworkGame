@@ -31,6 +31,6 @@ run <- function(n,chance,popularity,age,nRuns) {
 		towrite <- toJSON(towrite, pretty=TRUE)
 		write(towrite,file=filename)
 	}
-	writeToJSON(x,"~/Desktop/graph.json")
+	writeToJSON(to.r,"~/Desktop/graph.json")
 	return(to.r)
 }
