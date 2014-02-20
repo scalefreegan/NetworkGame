@@ -28,6 +28,7 @@ run <- function(n,chance,popularity,age,nRuns) {
 			game = x$results,
 			score = x$results_score
 			)
+		towrite <- toJSON(towrite, pretty=TRUE)
 		write(towrite,file=filename)
 	}
 	writeToJSON(x,"~/Desktop/graph.json")
