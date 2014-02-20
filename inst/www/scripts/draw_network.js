@@ -255,62 +255,62 @@ function start(where,cities,graph) {
       startDraw();
 }
 
-function cityDataParse(where,graph,callback) {
+function cityDataParse(where,callback) {
   //debugger;
   d3.csv("./data/uscitiespop.csv", function(cities) {
-      debugger;
-      // reduce size of cities
-      cities = cities.slice(0,graph.names.length);
-      for (var i = 0; i<cities.length; i++) {
-        cities[i].age = cities.length-i;
-      }
-      cities_data = cities;
-      // determine connectivity
-      graph.names.forEach(function(name){
-        cityNetwork[name-1] = {
-          name:name-1,
-          count:0,
-          city:undefined,
-          population:undefined,
-          latitude:undefined,
-          longitude:undefined
-          };
-      })
-      graph.links.forEach(function(link){
-        var source = link.source,
-            target = link.target;
-        cityNetwork[source].count = (cityNetwork[source].count || 0) + 1;
-        cityNetwork[target].count = (cityNetwork[target].count || 0) + 1;  
-      });
-      // sort
-      for (var node in cityNetwork) {
-        countByNode.push([node,cityNetwork[node].count]);
-      }
-      countByNode.sort(function(a, b) {return b[1] - a[1]});
-      // add city,lat,long,etc
-      var index = 0;
-      countByNode.forEach(function(node){
-        cityNetwork[parseInt(node[0])].city = cities[index].AccentCity;
-        cityNetwork[parseInt(node[0])].latitude = cities[index].Latitude;
-        cityNetwork[parseInt(node[0])].longitude = cities[index].Longitude;
-        cityNetwork[parseInt(node[0])].population = cities[index].Population;
-        // add city population to countByCity
-        countByCity[cities[index].AccentCity] = cities[index].Population;
-        index=index+1
-        var location = [+cityNetwork[parseInt(node[0])].longitude, +cityNetwork[parseInt(node[0])].latitude];
-        locationByCity[cityNetwork[parseInt(node[0])].city] = location;
-        positions.push(projection(location));
-      });
-      graph.links.forEach(function(link){
-        var source = link.source,
-            target = link.target,
-            links_t = linksByCity[cityNetwork[target].city] || (linksByCity[cityNetwork[target].city] = []);
-            links_s = linksByCity[cityNetwork[source].city] || (linksByCity[cityNetwork[source].city] = []);
-        links_t.push({source: cityNetwork[target].city, target: cityNetwork[source].city});
-        links_s.push({source: cityNetwork[source].city, target: cityNetwork[target].city});
-      });
-      callback(where,cities_data,graph);
+    debugger;
+    // reduce size of cities
+    cities = cities.slice(0,graph.names.length);
+    for (var i = 0; i<cities.length; i++) {
+      cities[i].age = cities.length-i;
+    }
+    cities_data = cities;
+    // determine connectivity
+    graph.names.forEach(function(name){
+      cityNetwork[name-1] = {
+        name:name-1,
+        count:0,
+        city:undefined,
+        population:undefined,
+        latitude:undefined,
+        longitude:undefined
+        };
+    })
+    graph.links.forEach(function(link){
+      var source = link.source,
+          target = link.target;
+      cityNetwork[source].count = (cityNetwork[source].count || 0) + 1;
+      cityNetwork[target].count = (cityNetwork[target].count || 0) + 1;  
     });
+    // sort
+    for (var node in cityNetwork) {
+      countByNode.push([node,cityNetwork[node].count]);
+    }
+    countByNode.sort(function(a, b) {return b[1] - a[1]});
+    // add city,lat,long,etc
+    var index = 0;
+    countByNode.forEach(function(node){
+      cityNetwork[parseInt(node[0])].city = cities[index].AccentCity;
+      cityNetwork[parseInt(node[0])].latitude = cities[index].Latitude;
+      cityNetwork[parseInt(node[0])].longitude = cities[index].Longitude;
+      cityNetwork[parseInt(node[0])].population = cities[index].Population;
+      // add city population to countByCity
+      countByCity[cities[index].AccentCity] = cities[index].Population;
+      index=index+1
+      var location = [+cityNetwork[parseInt(node[0])].longitude, +cityNetwork[parseInt(node[0])].latitude];
+      locationByCity[cityNetwork[parseInt(node[0])].city] = location;
+      positions.push(projection(location));
+    });
+    graph.links.forEach(function(link){
+      var source = link.source,
+          target = link.target,
+          links_t = linksByCity[cityNetwork[target].city] || (linksByCity[cityNetwork[target].city] = []);
+          links_s = linksByCity[cityNetwork[source].city] || (linksByCity[cityNetwork[source].city] = []);
+      links_t.push({source: cityNetwork[target].city, target: cityNetwork[source].city});
+      links_s.push({source: cityNetwork[source].city, target: cityNetwork[target].city});
+    });
+    callback(where,cities_data,graph);
+  });
 }
 
 function clearGraph(){
