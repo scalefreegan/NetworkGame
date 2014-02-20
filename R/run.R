@@ -1,6 +1,7 @@
 run <- function(n,chance,popularity,age,nRuns) {
 	to.r <- list()
 	to.r$g <- makeGraph(n,chance,popularity,age)
+	to.r$names <- V(g)$names
 	# convert graph into 
 	makeAdjacencyMatrix <- function(graph){
     	val <- get.adjacency(graph=graph,sparse=F)
