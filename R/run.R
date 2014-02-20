@@ -3,7 +3,7 @@ run <- function(n,chance,popularity,age,nRuns) {
 	to.r$g <- makeGraph(n,chance,popularity,age)
 	# convert graph into 
 	makeAdjacencyMatrix <- function(graph){
-    	val <- get.adjacency(graph=g,sparse=F)
+    	val <- get.adjacency(graph=graph,sparse=F)
 	    rownames(val) <- seq(1,dim(val)[1]); colnames(val) <- seq(1,dim(val)[2])
 
 	    diag(val) <- 0
