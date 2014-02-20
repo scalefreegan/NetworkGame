@@ -35,18 +35,18 @@ $("#go_network").click(function () {
 		        nRuns: 100    
 		      }, function(session){
 		        dataframe = session;
-		        datainfo();
+		        datainfo(cityDataParse);
 		      }).fail(function(jqXHR){
 		        alert(jqXHR.responseText);
 		      });
-		    function datainfo(){
-		    	return ocpu.rpc("write", {x : dataframe}, function(jsondata){
+		    function datainfo(callback){
+		    	ocpu.rpc("write", {x : dataframe}, function(jsondata){
 			      graph_data = jsondata;
 			    }).fail(function(jqXHR){
 			      alert(jqXHR.responseText);
 			    }).always(function(){
-		        	  cityDataParse(99,start);    
-		      });
+		        	callback(99,start);    
+		      	});
 		    }
             //
       });
