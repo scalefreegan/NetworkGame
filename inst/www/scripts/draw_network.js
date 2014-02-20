@@ -267,8 +267,8 @@ function cityDataParse(where,callback) {
     cities_data = cities;
     // determine connectivity
     graph.names.forEach(function(name){
-      cityNetwork[name-1] = {
-        name:name-1,
+      cityNetwork[name] = {
+        name:name,
         count:0,
         city:undefined,
         population:undefined,
