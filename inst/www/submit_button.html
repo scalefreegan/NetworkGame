@@ -38,7 +38,8 @@ $("#go_network").click(function () {
 		        dataframe = session;
 		        //datainfo();
 		      }).fail(function(jqXHR){
-		        errormsg(jqXHR.responseText);
+		      	debugger;
+		        alert(jqXHR.responseText);
 		      }).always(function(){
 		        alert("oh yeah!");      
 		      });
