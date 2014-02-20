@@ -44,10 +44,10 @@ $("#go_network").click(function () {
 		        alert("oh yeah!");      
 		      });
 		    function datainfo(){
-		    	return ocpu.rpc("write", {to.r : dataframe}, function(jsondata){
+		    	return ocpu.rpc("write", {x : dataframe}, function(jsondata){
 			      debugger;
 			    }).fail(function(jqXHR){
-			      errormsg(jqXHR.responseText);
+			      alert(jqXHR.responseText);
 			    });
 		    }
             //cityDataParse(99,start);
