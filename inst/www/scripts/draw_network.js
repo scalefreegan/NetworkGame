@@ -106,10 +106,10 @@ var circles = svg.append("svg:g")
 var cells = svg.append("svg:g")
     .attr("id", "cells");
 
-// DELETE THIS BEFORE DEPLOYING: STATIC FILE
-d3.json("./data/graph.json", function(data) {
-  graph = data;
-});
+// // DELETE THIS BEFORE DEPLOYING: STATIC FILE
+// d3.json("./data/graph.json", function(data) {
+//   graph = data;
+// });
 
 function drawStates(callback) {
     d3.json("./data/us-states.json", function(collection) {
