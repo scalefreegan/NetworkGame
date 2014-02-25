@@ -1,31 +1,15 @@
 <button type='button' class='btn btn-danger' id='go_network'>Go!</button>
 
 <script>
-// $("#go_network").qtip({ // Grab some elements to apply the tooltip to
-//             content: 'Click here when you are ready',
-//             position: {
-//               my: 'right center',
-//               at: 'left center',
-//               target: '#go_network'
-//             },
-//             style: {
-//               classes: 'qtip-blue qtip-shadow qtip-rounded'
-//             },
-//             show: {
-//               when:false,
-//               ready:true,
-//               delay:2000
-//             },
-//             hide: {
-//               event: "click"
-//             }
-//       });
+$("#go_network").prop("disabled",true)
 $("#go_network").click(function () {
-            //disable the go button
-            $('#playbuttons').load("playbuttons.html");
+            $('#stop').prop("disabled",false);
+			$('#speed_up').prop("disabled",false);
+			$('#speed_down').prop("disabled",false);
+			$('#first').prop("disabled",false);
+			$('#last').prop("disabled",false);
             //debugger;
             $('#go_network').prop("disabled",true);
-            $('#play').prop("disabled",true);
             //here's where i need to run the r stuff
             var req = ocpu.call("run", {
 		        n : 150,
@@ -47,6 +31,8 @@ $("#go_network").click(function () {
 			      alert(jqXHR.responseText);
 			    });
 		    }
+		    doTour2(cityDataParse);
+		    //cityDataParse(0,start);
             //
       });
 </script>

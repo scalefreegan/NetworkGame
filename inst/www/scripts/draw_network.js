@@ -1,6 +1,6 @@
 
  var w = parseInt(parseInt($("#jumbotron").css("width"))/1.4),
-    h = parseInt(w/1.9),
+    h = parseInt(w/1.8),
     w_opt = parseInt(w/1000),
     h_opt = parseInt(w/1000),
     // w = 1280, 1140
@@ -9,7 +9,7 @@
     t_time = 200,
     run = true,
     graph,
-    cities_data;
+    cities;
 
 var cityNetwork = [],
     locationByCity = {},
@@ -18,10 +18,17 @@ var cityNetwork = [],
     countByNode = [],
     positions = [],
     lastCircleColors = {},
+    lastCircleR = {},
     dPathOpacity = 0.25,
     dPathWidth = 0.5,
-    cityInd2Name_1 = {},
-    cityInd2Name_0 = {};
+    cityName2Ind = {},
+    cityGraphName2Name = {},
+    nRand = 3,
+    cityUpdate,
+    cityUpdate_obj,
+    positionUpdate,
+    positionUpdate_obj,
+    removeCity;
 
 
 
@@ -30,15 +37,23 @@ var projection = d3.geo.azimuthal()
     .origin([-98, 38])
     .scale(parseInt(w*1.2))
     //.translate([w/1.8, h/1.9]);
-    .translate([parseInt(w/1.9), parseInt(h/1.9)]);
+    .translate([parseInt(w/2), parseInt(h/2)]);
 
 var cityScale = d3.scale.linear()
-    .domain([10000, 1000000])
-    .range([w/125,w/80])
+    .domain([10000, 10000000])
+    .range([w/160,w/20]);
+
+var cityScaleScore = d3.scale.linear()
+    .domain([0, nRand+1])
+    .range([w/50,w/20]);
 
 var cityColorScale = d3.scale.linear()
     .domain([1, 15])
     .range(["#deebf7","#9ecae1","#3182bd"])
+
+var orangeTored = d3.scale.linear()
+    .domain([0, nRand+1])
+    .range(["white","blue"]);
 
 var speedScale = d3.scale.linear()
     .domain([1, 100])
@@ -79,7 +94,7 @@ var svg = right_panel.append("svg:svg")
     .style("max-width","100%");
 
 $("#right_panel").append($("<div class='col-md-12' style='padding:20px'>").load("svg_footer.html"));
-$("#right_panel").append($("<div class='btn-toolbar' role='toolbar' style='padding:20px' id='playbuttons'>").load("playbuttons_disabled.html"));
+$("#right_panel").append($("<div class='btn-toolbar' role='toolbar' style='padding:20px' id='playbuttons'>").load("playbuttons.html"));
 $("#right_panel").append($("<div class='col-md-12'>").load("playbuttons2.html"));
 
 var states = svg.append("svg:g")
@@ -90,6 +105,11 @@ var circles = svg.append("svg:g")
 
 var cells = svg.append("svg:g")
     .attr("id", "cells");
+
+// DELETE THIS BEFORE DEPLOYING: STATIC FILE
+d3.json("./data/graph.json", function(data) {
+  graph = data;
+});
 
 function drawStates(callback) {
     d3.json("./data/us-states.json", function(collection) {
@@ -110,10 +130,11 @@ function drawStates(callback) {
     });
 }
 
-function doTour() {
+function doTour1() {
       var name = "Friend"
       var tour = new Tour({
-          storage : false
+          storage : false,
+          onEnd : function(tour) {$("#go_network").prop("disabled",false)},
       });
    
       tour.addSteps([
@@ -173,6 +194,23 @@ function doTour() {
           title: "When you're ready...",
           content: "<p>Press this button.</p><p>After building a network according to your specifications, I will score your network.</p><p>The more <b>robust</b> the <b>better</b>.</p> "
         },
+      ]);
+   
+     // Initialize the tour
+      tour.init();
+   
+      // Start the tour
+      tour.start();
+}
+
+function doTour2(callback) {
+      var name = "Friend"
+      var tour = new Tour({
+          storage : false,
+          onEnd: function (tour) {callback(0,start);},
+      });
+   
+      tour.addSteps([
         {
           element: "#go_network",
           placement: "right",
@@ -190,18 +228,18 @@ function doTour() {
           element: "#playbuttons",
           placement: "bottom",
           title: "One more thing...",
-          content: "You can control the animation using these buttons. You can increase or decrease the speed or pause the animation using these buttons."
+          content: "You can control the speed or pause the animation using these buttons. Have fun!"
         },
-      ]);
-   
-     // Initialize the tour
+        ]);
+      // Initialize the tour
       tour.init();
    
       // Start the tour
       tour.start();
+      
 }
 
-drawStates(function(){doTour()});
+drawStates(function(){doTour1()});
 
 function start(where,cities,graph) { 
       //debugger;
@@ -217,58 +255,175 @@ function start(where,cities,graph) {
         //debugger;
         cityDataParse(where,start);
       }
-      if (where>100) {
-        //debugger;
-        $("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("connection.html"));
-      }
       index_g = where || 0;
       var t;
       function startDraw(){
         //debugger;
         //handle stupidity
         var tmp_speed = parseInt($("#speed").val());
-        var ready_state = false;
         tmp_speed = isNaN(tmp_speed) ? 10 : tmp_speed;
         t_time = parseInt(speedScale(tmp_speed));
         index_g = index_g + 1;
-        if (index_g<=cities.length && run==true) {
-          draw(cities.slice(0,index_g),positions.slice(0,index_g),locationByCity,
+        if (index_g<=graph.names.length && run==true) {
+          var cities_now,
+              positions_now;
+          cities_now = dataGivenIndex(index_g,cities,graph,cityNetwork,cityName2Ind);
+          positions_now = dataGivenIndex(index_g,positions,graph,cityNetwork,cityName2Ind);
+          //debugger;
+          draw(cities_now,positions_now,locationByCity,
           linksByCity,countByCity,cities);
           //console.log(index);
           t = setTimeout(function(){
             startDraw();
           },t_time); 
-        } else if (run==true && index_g==cities.length+1){
+        } else if (run==true && index_g==graph.names.length+1){
           //debugger;
           var tmpcircles = d3.selectAll("circle");
           tmpcircles[[0]].forEach(function(d){lastCircleColors[d.id]=d.style.fill});
+          tmpcircles[[0]].forEach(function(d){lastCircleR[d.id]=d.getAttribute("r")});
           //debugger;
-          bootbox.alert("<p>Your network is read to score.</p><p>When you're ready, click the 'Score button'</p>", function() {
+          bootbox.alert("<p>Your network is ready to score.</p><p>When you're ready, click the 'Score button'</p>", function() {
               $("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("score_button.html"));
+              linkViewOn();
             }); 
-        } else if (index_g>cities.length && run==true) {
-          // here's where we start destroying the network
-        } else if (run==false){
+        } else {
           clearTimeout(t);
         }
       }
       startDraw();
 }
 
+function linkViewOn(sPath) {
+  sPath = sPath || []
+  var tmpcells = d3.selectAll("path.cell");
+  tmpcells.on("mouseover", function(d,i){
+      d3.select("#table_city").text(d.AccentCity);
+      d3.select("#table_founded").text((cities.length-d.age)+1);
+      d3.select("#table_population").text(numberWithCommas(d.Population));
+      d3.select("#table_connections").text(numberWithCommas($(this.parentNode).children("path.arc").length));
+      d3.select(this.parentNode).selectAll("path.arc")
+      .style("stroke","red")
+      .style("opacity", 0.5)
+      .style("stroke-width",7.5);
+    });
+  tmpcells.on("mouseout", function(d, i) {
+      d3.select(this.parentNode).selectAll("path.arc")
+        .style("stroke","black")
+        .style("opacity",dPathOpacity)
+        .style("stroke-width",dPathWidth);
+      if (sPath.length>0) {
+        colorSPath(sPath)
+      }  
+    }); 
+}
+
+function linkViewOff(sPath) {
+  sPath = sPath || [];
+  // make sure links are set to default
+  d3.selectAll("path.arc")
+      .style("stroke",function(d){
+        if (sPath.indexOf(d.source)==-1 && sPath.indexOf(d.target)==-1) {
+          return "black"
+        } else {
+          return $(this).css("stroke");
+        }
+        
+      })
+      .style("opacity",function(d){
+        if (sPath.indexOf(d.source)==-1 && sPath.indexOf(d.target)==-1) {
+          return dPathOpacity
+        } else {
+          return $(this).css("opacity");
+        }
+        
+      })
+      .style("stroke-width",function(d){
+        if (sPath.indexOf(d.source)==-1 && sPath.indexOf(d.target)==-1) {
+          return dPathWidth
+        } else {
+          return $(this).css("stroke-width");
+        }
+    });
+  var tmpcells = d3.selectAll("path.cell");
+  tmpcells.on("mouseover", function(d,i){
+      d3.select("#table_city").text(d.AccentCity);
+      d3.select("#table_founded").text((cities.length-d.age)+1);
+      d3.select("#table_population").text(numberWithCommas(d.Population));
+      d3.select("#table_connections").text(numberWithCommas($(this.parentNode).children("path.arc").length));
+    }); 
+}
+
+function colorSPath(sPath) {
+  var greenTored = d3.scale.linear()
+    .domain([0, sPath.length-1])
+    .range(["green","red"]);
+  sPath = sPath || [];
+  // color node
+  var cStart=$(':regex(id,^'+ sPath[0] +')').filter("circle");
+  var cEnd=$(':regex(id,^'+ sPath[sPath.length-1] +')').filter("circle");
+  cStart.css({
+          fill : greenTored(0)
+        });
+  cStart.attr({
+          r : w/35
+        });
+  cEnd.css({
+          fill : greenTored(sPath.length)
+        });
+  cEnd.attr({
+          r : w/35
+        });
+  d3.selectAll("path.arc")
+      .style("stroke","black")
+      .style("opacity", dPathOpacity)
+      .style("stroke-width", dPathWidth)
+  for (var i=0;i<sPath.length-1;i++) {
+      //debugger;
+      $(':regex(id,^'+ sPath[i]+sPath[i+1] + ')').css({
+        stroke:greenTored(i),
+        opacity:1,
+        strokeWidth:5
+      });
+      $(':regex(id,^'+ sPath[i+1]+sPath[i] + ')').css({
+        stroke:greenTored(i),
+        opacity:1,
+        strokeWidth:5
+      });
+  }
+  $("#Ostart").text(sPath[0]).css({color:"green"});
+  $("#Ostop").text(sPath[sPath.length-1]).css({color:"red"})
+}
+
+function dataGivenIndex(index_d,data,graph,cityNetwork,cityName2Ind) {
+  // restrict cities and positions data given an index
+  // node names
+  var subCities = cityNetwork.slice(0,index_d);
+  // restrict data given these nodes
+  var data_return = [];
+  subCities.forEach(function(d){
+    data_return.push(data[cityName2Ind[d.city]])
+  });
+  return data_return;
+}
+
 function cityDataParse(where,callback) {
   //debugger;
-  d3.csv("./data/uscitiespop.csv", function(cities) {
-    // debugger;
+  d3.csv("./data/uscitiespop.csv", function(data) {
+    //debugger;
     // reduce size of cities
-    cities = cities.slice(0,graph.names.length);
-    for (var i = 0; i<cities.length; i++) {
-      cities[i].age = cities.length-i;
+    cities = data.slice(0,graph.names.length);
+    var i = 0;
+    cities.forEach(function(n){
+      cityName2Ind[n.AccentCity+" "+n.Region] = i;
+      i = i+1;
+    })
+    for (var i = 0; i < cities.length; i++) {
+      cities[i].altName = cities[i].AccentCity+" "+cities[i].Region
     }
-    cities_data = cities;
     // determine connectivity
     graph.names.forEach(function(name){
-      cityNetwork[name] = {
-        name:name,
+      cityNetwork[parseInt(name)] = {
+        name:parseInt(name),
         count:0,
         city:undefined,
         population:undefined,
@@ -290,17 +445,23 @@ function cityDataParse(where,callback) {
     // add city,lat,long,etc
     var index = 0;
     countByNode.forEach(function(node){
-      cityNetwork[parseInt(node[0])].city = cities[index].AccentCity;
+      cityNetwork[parseInt(node[0])].city = cities[index].AccentCity + " " + cities[index].Region;
       cityNetwork[parseInt(node[0])].latitude = cities[index].Latitude;
       cityNetwork[parseInt(node[0])].longitude = cities[index].Longitude;
       cityNetwork[parseInt(node[0])].population = cities[index].Population;
       // add city population to countByCity
-      countByCity[cities[index].AccentCity] = cities[index].Population;
+      countByCity[cities[index].AccentCity + " " + cities[index].Region] = cities[index].Population;
       index=index+1
       var location = [+cityNetwork[parseInt(node[0])].longitude, +cityNetwork[parseInt(node[0])].latitude];
       locationByCity[cityNetwork[parseInt(node[0])].city] = location;
       positions.push(projection(location));
     });
+    for (var i = 0; i<cityNetwork.length; i++) {
+      cities[cityName2Ind[cityNetwork[i].city]].age = cities.length-cityNetwork[i].name;
+    }
+    for (var i = 0; i<cityNetwork.length; i++) {
+      cityGraphName2Name["'"+cityNetwork[i].name+"'"] = cityNetwork[i].city;
+    }
     graph.links.forEach(function(link){
       var source = link.source,
           target = link.target,
@@ -309,12 +470,28 @@ function cityDataParse(where,callback) {
       links_t.push({source: cityNetwork[target].city, target: cityNetwork[source].city});
       links_s.push({source: cityNetwork[source].city, target: cityNetwork[target].city});
     });
-    callback(where,cities_data,graph);
+    cityUpdate_obj = jQuery.extend(true, {}, cities);
+    positionUpdate_obj = jQuery.extend(true, {}, positions);
+    callback(where,cities,graph);
   });
 }
 
-function clearGraph(){
+function obj2array(x) {
+  tor = [];
+  for (var j in x) {
+    tor.push(x[j]);
+  }
+  return tor;
+}
+
+function clearGraph(callback,sPath){
   //debugger;
+  // repopulate cities
+  sPath = sPath ||[];
+  cities = obj2array(cityUpdate_obj);
+  positions = obj2array(positionUpdate_obj);
+  cityUpdate = cities;
+  positionUpdate = positions;
   var g = cells.selectAll("g")
       .data([]);
   g.exit().remove();
@@ -323,115 +500,156 @@ function clearGraph(){
     .data([]);
   pathcell.exit().remove();
   $("#circles").empty();
-  $("#left_panel").empty();
+  //$("#left_panel").empty();
+  cities_now = dataGivenIndex(cities.length-1,cities,graph,cityNetwork,cityName2Ind);
+  positions_now = dataGivenIndex(cities.length-1,positions,graph,cityNetwork,cityName2Ind);
+  if (callback==draw) {
+    callback(cities_now,positions_now,locationByCity,linksByCity,countByCity,cities);
+    colorSPath(sPath);
+  } else if (callback==start){
+    console.log("it was start");
+    callback(0,cities,graph);
+  }
+  
 }
 
 function score(where) {
   var t2,
       t3,
       score_ind,
-      k_ind = 0;
-  function pretendKill(ind,graph,cityUpdate,positionUpdate,currentCities,callback) {
-    // select random cities
-    if (currentCities==null) {
-      var currentCities = [];
-      cityUpdate.forEach(function(d){currentCities.push(d.AccentCity)});
-      currentCities.forEach(function(d,i){cityInd2Name_1["'"+(i+1)+"'"]=d});
-      currentCities.forEach(function(d,i){cityInd2Name_0["'"+i+"'"]=d});
-    }
+      k_ind = 0,
+      sPath = [];
+  
+  $("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("connection.html"));
+  function pretendKill(ind,cityUpdate,positionUpdate,currentCities,callback) {
+    //console.log("pretendKill");
     // show shortest path 
     sPath = [];
     //debugger;
-    (graph.game[ind].paths.split(" ")).forEach(function(d){sPath.push(cityInd2Name_1["\'"+d+"\'"])});
-    for (var i=0;i<sPath.length-1;i=i+2) {
-      debugger;
-      $(':regex(id,^'+ sPath[i]+sPath[i+1] + ')').css({
-        stroke:"blue",
-        opacity:1,
-        strokeWidth:5
-      });
-      $(':regex(id,^'+ sPath[i+1]+sPath[i] + ')').css({
-        stroke:"blue",
-        opacity:1,
-        strokeWidth:5
-      });
-    }
+    (graph.game[ind].paths.split(" ")).forEach(function(d){sPath.push(cityGraphName2Name["\'"+d+"\'"])});
     //debugger;
-    if (k_ind<3) {
+    linkViewOff(sPath);
+    colorSPath(sPath);
+    // d3.selectAll("circle")
+    //     .style("fill",function(d){lastCircleColors[d.altName];});
+    if (k_ind<(nRand+2)) {
+      if (k_ind<nRand) {
+        // select a random city
+        var rCity = currentCities[Math.floor((Math.random()*cityUpdate.length-1))];
+        while (rCity==undefined) {
+          rCity = currentCities[Math.floor((Math.random()*cityUpdate.length-1))];
+        }
+        d3.select("#current_age").text("Close call " + rCity).style("color",orangeTored(k_ind));
+        // make it look different
+        var tmp=$(':regex(id,^'+ rCity +')');
+        var tmp_circles = tmp.filter("circle");
+        var tmp_paths = tmp.filter("path");
+        tmp_circles.css({
+          fill : orangeTored(k_ind)
+        });
+        // tmp_circles.attr({
+        //   r : cityScaleScore(k_ind)
+        // });
+        tmp_paths.css({
+          stroke: orangeTored(k_ind),
+          opacity:1,
+          strokeWidth:5
+        });
+      } else if (k_ind==(nRand)) {
+        callback(cityGraphName2Name["\'"+parseInt(graph.game[ind].removed)+"\'"],cityUpdate,positionUpdate);
+      } else {
+        //debugger;
+        console.log("I am a delay!")
+      }
       k_ind = k_ind+1;
-      d3.selectAll("path.arc")
-        .style("stroke","black")
-        .style("opacity",dPathOpacity)
-        .style("stroke-width",dPathWidth);
-      d3.selectAll("circle")
-        .style("fill",function(d){lastCircleColors[d.AccentCity];});
-      // select a random city
-      var rCity = currentCities[Math.floor((Math.random()*cityUpdate.length-1))];
-      // make it look different
-      var tmp=$(':regex(id,^'+ rCity +')');
-      var tmp_circles = tmp.filter("circle");
-      var tmp_paths = tmp.filter("path");
-      tmp_circles.css({
-        fill:"orange"
-      });
-      tmp_paths.css({
-        stroke:"orange",
-        opacity:1,
-        strokeWidth:5
-      });
       t2 = setTimeout(function(){
-        pretendKill(ind,graph,cityUpdate,positionUpdate,currentCities,callback);
-      },t_time);
+        pretendKill(ind,cityUpdate,positionUpdate,currentCities,Kill);
+      },t_time*2);
     } else {
-        d3.selectAll("path.arc")
-          .style("stroke","black")
-          .style("opacity",dPathOpacity)
-          .style("stroke-width",dPathWidth);
-        d3.selectAll("circle")
-          .style("fill",function(d){lastCircleColors[d.AccentCity];});
-        clearTimeout(t2);
-        callback(cityInd2Name[parseInt(game[ind].removed)],cityUpdate,positionUpdate,currentCities,draw);
+      clearTimeout(t2);
+      runItAll();
     }
   }
-
-  function prepareForKill(city,cityUpdate,positionUpdate,currentCities,callback) {
+  function Kill(city,cityUpdate,positionUpdate) {
+    removeCity = city;
+    console.log("Kill");
+    d3.select("#current_age").text("SHUTTING DOWN " + city).style("color",orangeTored(k_ind)).style("font-size","24");
     // remove city from cityUpdate and positonUpdate
-    cityInd = currentCities.indexOf(city);
+    //debugger;
+    var cityInd = cityName2Ind_update[city];
     cityUpdate.splice(cityInd,1);
     positionUpdate.splice(cityInd,1);
-    currentCities.splice(cityInd,1);
     //debugger;
     tmp=$(':regex(id,^'+ city +')');
     tmp_circles = tmp.filter("circle");
     tmp_paths = tmp.filter("path");
     tmp_circles.css({
-      fill:"red"
+      fill: orangeTored(k_ind)
     });
+    tmp_circles.attr({
+          r : cityScaleScore(k_ind)
+        });
     tmp_paths.css({
-      stroke:"red",
+      stroke: orangeTored(k_ind),
       opacity:1,
       strokeWidth:5
     });
     //debugger;
-    callback(cityUpdate,positionUpdate,locationByCity,
-              linksByCity,countByCity,cities_data);
+    draw(cityUpdate,positionUpdate,locationByCity,
+              linksByCity,countByCity,cities,sPath,true,removeCity);
+    score_ind = score_ind+1;
   }
-  score_ind = where - (cities_data.length+1);
-  function runItAll(graph) {
+  function checkStatus(score_ind) {
+    if (score_ind>0) {
+      // look to previous graph
+      if (graph.game[score_ind].paths!=graph.game[score_ind-1].paths) {
+        console.log("redraw!")
+        // this means you need a redraw
+        //debugger;
+        //linkViewOff(sPath)
+        clearGraph(draw,sPath);
+      } 
+    } 
+  }
+  function updateCityName2Ind(cityUpdate) {
+    cityName2Ind_update = {};
+    var i = 0;
+    cityUpdate.forEach(function(n){
+      cityName2Ind_update[n.AccentCity+" "+n.Region] = i;
+      i = i+1;
+    });
+    return cityName2Ind_update;
+  }
+  function runItAll() {
+    var tmp_speed = parseInt($("#speed").val());
+        tmp_speed = isNaN(tmp_speed) ? 10 : tmp_speed;
+        t_time = parseInt(speedScale(tmp_speed));
     if (score_ind<=graph.game.length) {
-      score_ind = score_ind+1;
-      t3 = setTimeout(function(){
-        pretendKill(score_ind,graph,cities_data,positions,null,prepareForKill);
-      },t_time); 
+    //if (score_ind<=13) {
+      console.log("runItALL");
+      checkStatus(score_ind);
+      k_ind = 0;
+      // select random cities
+      var currentCities = [];
+      var citySelection = $("circle");
+      for (var i = 0; i < citySelection.length; i++) {
+        //debugger;
+        currentCities.push(citySelection[i].getAttribute("id"));
+      }
+      cityName2Ind_update = updateCityName2Ind(cityUpdate);
+      pretendKill(score_ind,cities,positions,currentCities,Kill);
+      
     } else {
-      clearTimeout(t3);
+      console.log("done");
+      linkViewOn(sPath);
     }
   }
-  runItAll(graph);
+  score_ind = where - (cities.length+1);
+  runItAll();
 }
 
 function isItNew(cities,link){
-  var newCity = cities[cities.length-1].AccentCity;
+  var newCity = cities[cities.length-1].altName;
   if ( link.source == newCity || link.target == newCity) {
     return true;
   } else {
@@ -452,23 +670,35 @@ function convertToInt(x) {
   return y;
 }
 
-function draw(cities,positions,locationByCity,linksByCity,countByCity,allCities){
-  d3.select("#current_age").text("Current round: " + cities.length);
+function draw(cities_sub,positions,locationByCity,linksByCity,countByCity,allCities,sPath,score,removeCity){
   //debugger;
-  d3.select("#progressbar").transition()
-    .attr("aria-valuenow",cities.length)
-    .style("width", cities.length+'%');
+  sPath = sPath || [];
+  score = score || false
+  percentRemaining = (cities_sub.length/graph.names.length)*100;
+  if (score==false) {
+    d3.select("#current_age").text("Current round: " + cities_sub.length);
+    //debugger;
+    d3.select("#progressbar")
+      .attr("aria-valuenow",percentRemaining.toFixed(0))
+      .style("width", percentRemaining.toFixed(0)+'%')
+      .text(percentRemaining.toFixed(0)+"%");
+    } else {
+      d3.select("#progressbar")
+      .attr("aria-valuenow",percentRemaining.toFixed(0))
+      .style("width", percentRemaining.toFixed(0)+'%')
+      .text(percentRemaining.toFixed(0)+"%");
+    }
   var arc = d3.geo.greatArc()
     .source(function(d) { return locationByCity[d.source]; })
     .target(function(d) { return locationByCity[d.target]; });
-  // Compute the Voronoi diagram of cities projected positions.  
+  // Compute the Voronoi diagram of cities_sub projected positions.  
   var polygons = d3.geom.voronoi(positions);
   
   var g = cells.selectAll("g")
-      .data(cities,function(d) { return d.AccentCity; });
+      .data(cities_sub,function(d) { return d.altName; });
   
-  g.exit().selectAll("path.arc").transition().duration(t_time*5)
-    .style("stroke","red")
+  g.exit().selectAll("path.arc").transition().duration(t_time*10)
+    .style("stroke","grey")
     .style("opacity",0)
     .style("stroke-width",0)
     .remove();
@@ -481,81 +711,110 @@ function draw(cities,positions,locationByCity,linksByCity,countByCity,allCities)
   pathcell.exit().remove();
   // add voronoi cells
   g.enter().append("svg:g")
-    .attr("id",function(d){ return d.AccentCity; });
+    .attr("id",function(d){ return d.altName; });
   g.append("svg:path")
       .attr("class", "cell")
       .attr("d", function(d, i) { return "M" + polygons[i].join("L") + "Z"; })
       .on("mouseover", function(d, i) {
-        //debugger;
         d3.select("#table_city").text(d.AccentCity);
-        //debugger;
         d3.select("#table_founded").text((allCities.length-d.age)+1);
-        d3.select("#table_population").text(numberWithCommas(Math.round(((cities.length-(cities[0].age-d.age))/allCities.length)*countByCity[d.AccentCity])));
+        d3.select("#table_population").text(numberWithCommas(Math.round(((cities_sub.length-(cities_sub[0].age-d.age))/allCities.length)*countByCity[d.altName])));
         d3.select("#table_connections").text(numberWithCommas($(this.parentNode).children("path.arc").length));
-        //console.log(this.parentNode);
-        d3.select(this.parentNode).selectAll("path.arc")
-          .style("stroke","red")
-          .style("opacity",0.5)
-          .style("stroke-width",7.5);
-      })
-      .on("mouseout", function(d, i) {
-        d3.select(this.parentNode).selectAll("path.arc")
-          .style("stroke","black")
-          .style("opacity",dPathOpacity)
-          .style("stroke-width",dPathWidth);
       });
   var currentCities = [];
-  for(i=0;i<cities.length;i++){
-      currentCities.push(cities[i].AccentCity);
+  for(i=0;i<cities_sub.length;i++){
+      currentCities.push(cities_sub[i].altName);
   }
   var connections = g.selectAll("path.arc")
       .data(function(d) {
-        var paths = linksByCity[d.AccentCity] || [];
-        var paths_tor = [];
-        if (paths.length>0) {
-          for(i=0;i<paths.length;i++) {
-            if (currentCities.indexOf(paths[i].source)>=0 && currentCities.indexOf(paths[i].target)>=0){
-              paths_tor.push(paths[i]);
+        if (currentCities.indexOf(d.altName)>=0) {
+          var paths = linksByCity[d.altName] || [];
+          var paths_tor = [];
+          if (paths.length>0) {
+            for(i=0;i<paths.length;i++) {
+              if (currentCities.indexOf(paths[i].source)>=0 && currentCities.indexOf(paths[i].target)>=0){
+                  paths_tor.push(paths[i]);
+              }
             }
           }
         }
         return paths_tor;
       },function(d){return d.source+d.target});
 
+  connections.exit().transition().duration(t_time*10)
+    .style("stroke","grey")
+    .style("opacity",0)
+    .style("stroke-width",0)
+    .remove();
+
   var connectionsEnter = connections.enter().append("svg:path")
       .attr("class", "arc")
       .attr("d", function(d) { return path(arc(d)); })
       .attr("id", function(d) { return d.source+d.target })
-      .style("opacity", function(d) { return isItNew(cities,d) ? "1.0" : dPathOpacity } )
-      .style("stroke",function(d) { return isItNew(cities,d) ? "blue" : "black" })
-      .style("stroke-width",function(d) { return isItNew(cities,d) ? 10 : dPathWidth });
+      .style("opacity", function(d) { return isItNew(cities_sub,d) ? "1.0" : dPathOpacity } )
+      .style("stroke",function(d) { return isItNew(cities_sub,d) ? "blue" : "black" })
+      .style("stroke-width",function(d) { return isItNew(cities_sub,d) ? 10 : dPathWidth });
   //updated transitions
   connections.transition().duration(t_time)
-      .style("opacity",dPathOpacity)
-      .style("stroke","black")
-      .style("stroke-width",dPathWidth);
+      .style("stroke",function(d){
+        if (sPath.indexOf(d.source)==-1 && sPath.indexOf(d.target)==-1) {
+          return "black"
+        } else {
+          return $(this).css("stroke");
+        }
+        
+      })
+      .style("opacity",function(d){
+        if (sPath.indexOf(d.source)==-1 && sPath.indexOf(d.target)==-1) {
+          return dPathOpacity
+        } else {
+          return $(this).css("opacity");
+        }
+      })
+      .style("stroke-width",function(d){
+        if (sPath.indexOf(d.source)==-1 && sPath.indexOf(d.target)==-1) {
+          return dPathWidth
+        } else {
+          return $(this).css("stroke-width");
+        }
+      })
   
   var circlesUpdate = circles.selectAll("circle")
-      .data(cities,function(d) { return d.AccentCity; });
+      .data(cities_sub,function(d) { return d.altName; });
 
   var circlesEnter = circlesUpdate.enter().append("svg:circle")
       .attr("cx", function(d, i) { return positions[i][0]; })
       .attr("cy", function(d, i) { return positions[i][1]; })
-      .attr("r", function(d, i) { return cityScale(((cities.length-(cities[0].age-d.age))/allCities.length)*countByCity[d.AccentCity]); })
-      .attr("id",function(d) { return d.AccentCity; })
-      .style("fill",function(d) { return cityColorScale(cities.length-(cities[0].age-d.age)) } );
+      .attr("r", function(d, i) { return cityScale(((cities_sub.length-(cities_sub[0].age-d.age))/allCities.length)*countByCity[d.altName]); })
+      .attr("id",function(d) { return d.altName; })
+      .style("fill",function(d) { return cityColorScale(cities_sub.length-(cities_sub[0].age-d.age)) } );
       //.sort(function(a, b) { return countByCity[d.AccentCity] - countByACity[d.AccentCity]; });
   //updated onex
   circlesUpdate.transition().duration(t_time)
-    .attr("r", function(d, i) { return cityScale(((cities.length-(cities[0].age-d.age))/allCities.length)*countByCity[d.AccentCity]); })
-    .style("fill",function(d) { return cityColorScale(cities.length-(cities[0].age-d.age)) } );
-
-  var circlesExit = circlesUpdate.exit().transition().duration(t_time*5)
-    .attr("r",function(d,i){return this.getAttribute("r")/10})
+    .attr("r", function(d, i) { 
+      if (score == true) {
+        //debugger;
+      }
+      if (d.altName!=sPath[0] && d.altName!=sPath[sPath.length-1]) {
+        return cityScale(((cities_sub.length-(cities_sub[0].age-d.age))/allCities.length)*countByCity[d.altName]); 
+      } else {
+        return this.getAttribute("r");
+      }
+    })
+    .style("fill",function(d) { 
+       if (d.altName!=sPath[0] && d.altName!=sPath[sPath.length-1]) {
+        return cityColorScale(cities_sub.length-(cities_sub[0].age-d.age));
+      } else {
+        return this.style["fill"];  
+      }
+    });
+  var circlesExit = circlesUpdate.exit().transition().duration(t_time*10)
+    //.attr("r",function(d,i){return this.getAttribute("r")/10})
+    .attr("r",0)
+    .style("opacity",0)
     .remove();
-
-  
 }
+
   
 
 
