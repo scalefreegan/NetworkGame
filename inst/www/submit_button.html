@@ -19,19 +19,19 @@ $("#go_network").click(function () {
 		        nRuns: 100    
 		      }, function(session){
 		        dataframe = session;
-		        datainfo(cityDataParse);
+		        datainfo(doTour2);
 		      }).fail(function(jqXHR){
 		        alert(jqXHR.responseText);
 		      });
 		    function datainfo(callback){
 		    	ocpu.rpc("writeJSON", {x : dataframe}, function(jsondata){
 			      graph = jsondata;
-			      callback(140,start);
+			      callback(cityDataParse);
 			    }).fail(function(jqXHR){
 			      alert(jqXHR.responseText);
 			    });
 		    }
-		    doTour2(cityDataParse);
+		    //doTour2(cityDataParse);
 		    //cityDataParse(0,start);
             //
       });
