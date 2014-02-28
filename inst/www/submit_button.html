@@ -1,8 +1,30 @@
 <button type='button' class='btn btn-danger' id='go_network'>Go!</button>
 
 <script>
+// spinner 
+var opts = {
+  lines: 13, // The number of lines to draw
+  length: 20, // The length of each line
+  width: 10, // The line thickness
+  radius: 30, // The radius of the inner circle
+  corners: 1, // Corner roundness (0..1)
+  rotate: 0, // The rotation offset
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  color: 'blue', // #rgb or #rrggbb or array of colors
+  speed: 1, // Rounds per second
+  trail: 60, // Afterglow percentage
+  shadow: false, // Whether to render a shadow
+  hwaccel: false, // Whether to use hardware acceleration
+  className: 'spinner', // The CSS class to assign to the spinner
+  zIndex: 2e9, // The z-index (defaults to 2000000000)
+  top: '150px', // Top position relative to parent in px
+  left: 'auto' // Left position relative to parent in px
+};
+
 $("#go_network").prop("disabled",true)
 $("#go_network").click(function () {
+			var target = document.getElementById('right_panel');
+			spinner = new Spinner(opts).spin(target);
             $('#stop').prop("disabled",false);
 			$('#speed_up').prop("disabled",false);
 			$('#speed_down').prop("disabled",false);
@@ -10,13 +32,14 @@ $("#go_network").click(function () {
 			$('#last').prop("disabled",false);
             //debugger;
             $('#go_network').prop("disabled",true);
+      		$("#go_network").text("loading")
             //here's where i need to run the r stuff
             var req = ocpu.call("run", {
 		        n : 150,
 		        chance : parseInt($("#sl1").prop("value")), 
 		        popularity : parseInt($("#sl2").prop("value")),
 		        age : parseInt($("#sl3").prop("value")),
-		        nRuns: 100    
+		        nRuns: 20    
 		      }, function(session){
 		        dataframe = session;
 		        datainfo(doTour2);
@@ -31,7 +54,6 @@ $("#go_network").click(function () {
 			      alert(jqXHR.responseText);
 			    });
 		    }
-            //new stufffff!!!!
 		    //doTour2(cityDataParse);
 		    //cityDataParse(0,start);
             //

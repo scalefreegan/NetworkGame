@@ -106,7 +106,14 @@ var circles = svg.append("svg:g")
 var cells = svg.append("svg:g")
     .attr("id", "cells");
 
-// // DELETE THIS BEFORE DEPLOYING: STATIC FILE
+var expand_button = svg.append("svg.rect")
+    .attr("width",20)
+    .attr("height",h)
+    .attr("x",w-20)
+    .attr("y",h)
+    .style("fill","blue");
+
+// DELETE THIS BEFORE DEPLOYING: STATIC FILE
 // d3.json("./data/graph.json", function(data) {
 //   graph = data;
 // });
@@ -231,6 +238,7 @@ function doTour2(callback) {
           content: "You can control the speed or pause the animation using these buttons. Have fun!"
         },
         ]);
+      spinner.stop();
       // Initialize the tour
       tour.init();
    
