@@ -26,7 +26,7 @@ run <- function(n,chance,popularity,age,nRuns,uName) {
 	to.r$results_score2 <- 1/((1/(length(to.r$names)-1))*(sum(max(to.r$betweeness)-to.r$betweeness)))
 	# L.C. Freeman. A set of measures of centrality based on betweenness. Sociometry, 40 (1) (1977), pp. 35–41
 	to.r$links <- makeAdjacencyMatrix(to.r$g)
-	to.r$graph.tor <- paste(paste(to.r$links[,1],tmp$links[,2],sep=","),collapse=";")
+	to.r$graph.tor <- paste(paste(to.r$links[,1],to.r$links[,2],sep=","),collapse=";")
 
 	# writeToJSON <- function(x,filename) {
 	# 	towrite <- list(
