@@ -1,16 +1,112 @@
 <button type='button' class='btn btn-danger' id='score_network'>Score</button>
 
 <script>
+var expand_panel = svg.append("svg:g")
+  .attr("id","expand");
+
+var expand_panel_rect = expand_panel.append("svg:rect")
+    .attr("id","panel_rect")
+    .attr("width","5%")
+    .attr("height","100%")
+    .attr("x","95%")
+    .attr("y",0)
+    .style("fill","blue")
+    .style("opacity","0.001")
+    .on("click",function(){
+      // update middle panel
+      right_panel.transition().duration(t_time)
+        .attr("class","col-md-7");
+      var score_panel = jumbo_row.append("div")
+        .attr("class","col-md-3")
+        .attr("id","score_panel");
+      // remove this panel
+      $("#panel_rect").hide();
+      $("#panel_tri").hide();
+    })
+    .on("mouseover",function(d){
+      $("#panel_tri").css("opacity","0.9");
+      $("#panel_tri").css("stroke","blue");
+    })
+    .on("mouseout",function(d){
+      $("#panel_tri").css("opacity","0.5");
+      $("#panel_tri").css("stroke","black");
+    });
+
+var expand_panel_triangle = expand_panel.append("svg:polyline")
+    .attr("id","panel_tri")
+    .attr("points","" + w*.97 + "," + h*.47 + " " + w*.99 + "," + h*.50 + " " + w*.97 + "," + h*.53)
+    .style("fill","none")
+    .style("stroke","black")
+    .style("stroke-width","6")
+    .style("opacity","0.5")
+    .on("click",function(){
+      // update middle panel
+      right_panel.transition().duration(t_time)
+        .attr("class","col-md-6");
+      var score_panel = jumbo_row.append("div")
+        .attr("class","col-md-6")
+        .attr("id","score_panel");
+      // remove this panel
+      //$("#panel_rect").hide();
+      $("#panel_tri").hide();
+    })
+    .on("mouseover",function(d){
+      this.style.opacity="0.9"
+      this.style.stroke="blue"
+    })
+    .on("mouseout",function(d){
+      this.style.opacity="0.5"
+      this.style.stroke="black"
+    });
+
+$("#panel_tri").qtip({ // Grab some elements to apply the tooltip to
+              content: 'Click here to see your scores',
+              position: {
+                my: 'left bottom',
+                at: 'right center',
+                target: '#panel_tri'
+              },
+              style: {
+                classes: 'qtip-blue qtip-shadow qtip-rounded'
+              },
+              show: {
+                when:false,
+                ready:true,
+                delay:1000
+              },
+              hide: {
+                event: "click"
+              }
+          });
+
+
 $("#score_network").click(function () {
-            $("#progress_bar_text").text("%Remaining")
-            $('#play').prop("disabled",true);
-            $('#stop').prop("disabled",true);
-            $('#speed_up').prop("disabled",false);
-            $('#speed_down').prop("disabled",false);
-            $('#first').prop("disabled",true);
-            $('#last').prop("disabled",true);
-            linkViewOff();
-            cityUpdate = cities;
-            score((cities.length+1));
-      });
+    $("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("connection.html"));
+    $("#progress_bar_text").text("%Remaining");
+    $("#score_network").prop("disabled",true);
+    $('#play').prop("disabled",true);
+    $('#stop').prop("disabled",false);
+    $('#speed_up').prop("disabled",false);
+    $('#speed_down').prop("disabled",false);
+    $('#first').prop("disabled",true);
+    $('#last').prop("disabled",true);
+    // altered play/stop button fcns
+    $("#play").click(function(){
+        $('#play').prop("disabled",true);
+        $('#stop').prop("disabled",false);
+        window.run = true;
+        //debugger;
+        score(window.index_g);
+    });
+    $("#stop").click(function(){
+      $('#stop').prop("disabled",true);
+      $('#play').prop("disabled",false);
+      window.run = false;
+      // turn on link view
+      linkViewOn(sPath);
+    });
+    linkViewOff();
+    cityUpdate = cities;
+    score((cities.length+1));
+});
 </script>

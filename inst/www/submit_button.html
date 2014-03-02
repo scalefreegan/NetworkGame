@@ -25,11 +25,11 @@ $("#go_network").prop("disabled",true)
 $("#go_network").click(function () {
 			var target = document.getElementById('right_panel');
 			spinner = new Spinner(opts).spin(target);
-            $('#stop').prop("disabled",false);
+            $('#stop').prop("disabled",true);
 			$('#speed_up').prop("disabled",false);
 			$('#speed_down').prop("disabled",false);
-			$('#first').prop("disabled",false);
-			$('#last').prop("disabled",false);
+			$('#first').prop("disabled",true);
+			$('#last').prop("disabled",true);
             //debugger;
             $('#go_network').prop("disabled",true);
       		$("#go_network").text("loading")
@@ -39,7 +39,8 @@ $("#go_network").click(function () {
 		        chance : parseInt($("#sl1").prop("value")), 
 		        popularity : parseInt($("#sl2").prop("value")),
 		        age : parseInt($("#sl3").prop("value")),
-		        nRuns: 20    
+		        nRuns: 20,
+		        uName: userName   
 		      }, function(session){
 		        dataframe = session;
 		        datainfo(doTour2);
@@ -55,7 +56,6 @@ $("#go_network").click(function () {
 			    });
 		    }
 		    //doTour2(cityDataParse);
-		    //cityDataParse(0,start);
             //
       });
 </script>

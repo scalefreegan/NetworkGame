@@ -1,11 +1,4 @@
-
- var w = parseInt(parseInt($("#jumbotron").css("width"))/1.4),
-    h = parseInt(w/1.8),
-    w_opt = parseInt(w/1000),
-    h_opt = parseInt(w/1000),
-    // w = 1280, 1140
-    // h = 800; 712.5
-    g_index = 0,
+var g_index = 0,
     t_time = 200,
     run = true,
     graph,
@@ -30,12 +23,46 @@ var cityNetwork = [],
     positionUpdate_obj,
     removeCity;
 
+var jumboExit = d3.select(".container .jumbotron");
 
+var jumbo_row = d3.select(".container .jumbotron").append("div")
+  .attr("id","panel_container")
+  .attr("class","row");
+
+var left_panel = jumbo_row.append("div")
+  .attr("class","col-md-2")
+  .attr("id","left_panel");
+
+$("#left_panel").append($("<div id='div_option1'>").load("option1.html"));
+
+$("#left_panel").append($("<div id='div_option2'>").load("option2.html"));
+
+$("#left_panel").append($("<div id='div_option3'>").load("option3.html"));
+
+$("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("submit_button.html"));
+
+// separate the columns
+var right_panel = jumbo_row.append("div")
+  .attr("id","right_panel")
+  .attr("class","col-md-10");
+
+var right_panel_leader = right_panel.append("div")
+  .attr("id","right_panel_leader")
+  .attr("class","col-md-10")
+
+$("#right_panel_leader").html("<p>something here</p><p>two lines</p>");
+
+var w = parseInt(parseInt($("#right_panel").css("width"))*.8),
+    h = parseInt(w/1.6),
+    w_opt = parseInt(w/1000),
+    h_opt = parseInt(w/1000);
+    // w = 1280, 1140
+    // h = 800; 712.5
 
 var projection = d3.geo.azimuthal()
     .mode("equidistant")
     .origin([-98, 38])
-    .scale(parseInt(w*1.2))
+    .scale(parseInt(w*1.35))
     //.translate([w/1.8, h/1.9]);
     .translate([parseInt(w/2), parseInt(h/2)]);
 
@@ -63,28 +90,6 @@ var speedScale = d3.scale.linear()
 var path = d3.geo.path()
     .projection(projection);
 
-var jumboExit = d3.select(".container .jumbotron");
-
-var jumbo_row = d3.select(".container .jumbotron").append("div")
-  .attr("class","row");
-
-var left_panel = jumbo_row.append("div")
-  .attr("class","col-md-2")
-  .attr("id","left_panel");
-
-$("#left_panel").append($("<div id='div_option1'>").load("option1.html"));
-
-$("#left_panel").append($("<div id='div_option2'>").load("option2.html"));
-
-$("#left_panel").append($("<div id='div_option3'>").load("option3.html"));
-
-$("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("submit_button.html"));
-
-// separate the columns
-var right_panel = jumbo_row.append("div")
-  .attr("id","right_panel")
-  .attr("class","col-md-10");
-
 var svg = right_panel.append("svg:svg")
     .attr("id","svg")
     .attr("width",w)
@@ -106,14 +111,8 @@ var circles = svg.append("svg:g")
 var cells = svg.append("svg:g")
     .attr("id", "cells");
 
-var expand_button = svg.append("svg.rect")
-    .attr("width",20)
-    .attr("height",h)
-    .attr("x",w-20)
-    .attr("y",h)
-    .style("fill","blue");
 
-// DELETE THIS BEFORE DEPLOYING: STATIC FILE
+// //DELETE THIS BEFORE DEPLOYING: STATIC FILE
 // d3.json("./data/graph.json", function(data) {
 //   graph = data;
 // });
@@ -138,7 +137,7 @@ function drawStates(callback) {
 }
 
 function doTour1() {
-      var name = "Friend"
+      userName = "Friend"
       var tour = new Tour({
           storage : false,
           onEnd : function(tour) {$("#go_network").prop("disabled",false)},
@@ -153,7 +152,7 @@ function doTour1() {
           onNext : function(tour){
               var nameProvided = $("input[name=your_name]").val();
               if ($.trim(nameProvided) !== ""){
-                  name = nameProvided;
+                  userName = nameProvided;
               }
             }
         },
@@ -214,7 +213,12 @@ function doTour2(callback) {
       var name = "Friend"
       var tour = new Tour({
           storage : false,
-          onEnd: function (tour) {callback(0,start);},
+          onEnd: function (tour) {
+            $('#stop').prop("disabled",false);
+            $('#first').prop("disabled",false);
+            $('#last').prop("disabled",false);
+            callback(0,start);
+          },
       });
    
       tour.addSteps([
@@ -528,7 +532,6 @@ function score(where) {
       k_ind = 0,
       sPath = [];
   
-  $("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("connection.html"));
   function pretendKill(ind,cityUpdate,positionUpdate,currentCities,callback) {
     //console.log("pretendKill");
     // show shortest path 
@@ -540,7 +543,7 @@ function score(where) {
     colorSPath(sPath);
     // d3.selectAll("circle")
     //     .style("fill",function(d){lastCircleColors[d.altName];});
-    if (k_ind<(nRand+2)) {
+    if (k_ind<(nRand+2) && run == true) {
       if (k_ind<nRand) {
         // select a random city
         var rCity = currentCities[Math.floor((Math.random()*cityUpdate.length-1))];
@@ -573,9 +576,12 @@ function score(where) {
       t2 = setTimeout(function(){
         pretendKill(ind,cityUpdate,positionUpdate,currentCities,Kill);
       },t_time*2);
-    } else {
+    } else if (run == true) {
       clearTimeout(t2);
       runItAll();
+    } else {
+      linkViewOn(sPath);
+      clearTimeout(t2);
     }
   }
   function Kill(city,cityUpdate,positionUpdate) {
@@ -606,6 +612,7 @@ function score(where) {
     draw(cityUpdate,positionUpdate,locationByCity,
               linksByCity,countByCity,cities,sPath,true,removeCity);
     score_ind = score_ind+1;
+    index_g = score_ind + (cities.length+1);
   }
   function checkStatus(score_ind) {
     if (score_ind>0) {
@@ -682,6 +689,7 @@ function draw(cities_sub,positions,locationByCity,linksByCity,countByCity,allCit
   //debugger;
   sPath = sPath || [];
   score = score || false
+  // make sure paths are reset
   percentRemaining = (cities_sub.length/graph.names.length)*100;
   if (score==false) {
     d3.select("#current_age").text("Current round: " + cities_sub.length);
@@ -722,7 +730,11 @@ function draw(cities_sub,positions,locationByCity,linksByCity,countByCity,allCit
     .attr("id",function(d){ return d.altName; });
   g.append("svg:path")
       .attr("class", "cell")
-      .attr("d", function(d, i) { return "M" + polygons[i].join("L") + "Z"; })
+      .attr("d", function(d, i) { 
+        if (polygons[i].length>0) {
+          return "M" + polygons[i].join("L") + "Z"; 
+        }
+      })
       .on("mouseover", function(d, i) {
         d3.select("#table_city").text(d.AccentCity);
         d3.select("#table_founded").text((allCities.length-d.age)+1);
@@ -735,6 +747,7 @@ function draw(cities_sub,positions,locationByCity,linksByCity,countByCity,allCit
   }
   var connections = g.selectAll("path.arc")
       .data(function(d) {
+        //debugger;
         if (currentCities.indexOf(d.altName)>=0) {
           var paths = linksByCity[d.altName] || [];
           var paths_tor = [];
@@ -763,29 +776,30 @@ function draw(cities_sub,positions,locationByCity,linksByCity,countByCity,allCit
       .style("stroke",function(d) { return isItNew(cities_sub,d) ? "blue" : "black" })
       .style("stroke-width",function(d) { return isItNew(cities_sub,d) ? 10 : dPathWidth });
   //updated transitions
-  connections.transition().duration(t_time)
+  g.selectAll("path.arc").transition().duration(t_time)
       .style("stroke",function(d){
         if (sPath.indexOf(d.source)==-1 && sPath.indexOf(d.target)==-1) {
-          return "black"
+          // make sure reverse if also reset?
+          return "black";
         } else {
           return $(this).css("stroke");
-        }
-        
+        }   
       })
       .style("opacity",function(d){
         if (sPath.indexOf(d.source)==-1 && sPath.indexOf(d.target)==-1) {
-          return dPathOpacity
+          console.log("I should be" + dPathOpacity + d.source);
+          return dPathOpacity;
         } else {
           return $(this).css("opacity");
         }
       })
       .style("stroke-width",function(d){
         if (sPath.indexOf(d.source)==-1 && sPath.indexOf(d.target)==-1) {
-          return dPathWidth
+          return dPathWidth+"px";
         } else {
           return $(this).css("stroke-width");
         }
-      })
+      });
   
   var circlesUpdate = circles.selectAll("circle")
       .data(cities_sub,function(d) { return d.altName; });
