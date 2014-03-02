@@ -159,13 +159,13 @@ function doTour1() {
         {
           element: "#CA",
           placement: "right",
-          title: function(){ return "Congratulations, <b>" + name + "</b>!"; },
+          title: function(){ return "Congratulations, <b>" + userName + "</b>!"; },
           content: "You have been selected by the President to plan the country's communication network. <p> </p><p><i>You must be very smart!</i></p><p></p><p>I'm here to help you learn how to do your job and win the challenge.</p>"
         },
         {
           element: "#CA",
           placement: "left",
-          title: function(){ return "<b>" + name + "</b>, your job is to design a robust communication network"; },
+          title: function(){ return "<b>" + userName + "</b>, your job is to design a robust communication network"; },
           content: "<p>As the country grows and new cities are established, they need to be connected to pre-exisiting cities. Each year a new city will be established. You choose the rules that determine how that city gets wired into the network.</p><p></p><p>You will select how much influence each of the following has on the design of your network:</p>"
         },
         {
