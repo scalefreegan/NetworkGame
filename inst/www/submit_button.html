@@ -40,7 +40,8 @@ $("#go_network").click(function () {
 		        popularity : parseInt($("#sl2").prop("value")),
 		        age : parseInt($("#sl3").prop("value")),
 		        nRuns: 20,
-		        uName: userName   
+		        uName: userName,
+		        breaks:20   
 		      }, function(session){
 		        dataframe = session;
 		        datainfo(doTour2);
