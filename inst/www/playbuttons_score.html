@@ -1,0 +1,58 @@
+<button type="button" class="btn btn-default btn-lg" id="first" style="padding:4px 14px">
+		<span class="glyphicon glyphicon-step-backward"></span>
+</button>
+<button type="button" class="btn btn-default btn-lg" id="speed_down" style="padding:4px 14px">
+		<span class="glyphicon glyphicon-minus-sign"></span>
+</button>
+<button type="button" class="btn btn-default btn-lg" id="play" style="padding:4px 14px">
+		<span class="glyphicon glyphicon-play"></span>
+</button>
+<button type="button" class="btn btn-default btn-lg" id="stop" style="padding:4px 14px">
+		<span class="glyphicon glyphicon-pause"></span>
+</button>
+<button type="button" class="btn btn-default btn-lg" id="speed_up" style="padding:4px 14px">
+		<span class="glyphicon glyphicon-plus-sign"></span>
+</button>
+<button type="button" class="btn btn-default btn-lg" id="last" style="padding:4px 14px">
+		<span class="glyphicon glyphicon-step-forward"></span>
+</button>
+
+<script>
+
+
+
+	$("#play").click(function(){
+        $('#play').prop("disabled",true);
+        $('#stop').prop("disabled",false);
+        window.run = true;
+        //debugger;
+        score(window.index_g);
+    });
+	$("#stop").click(function(){
+      $('#stop').prop("disabled",true);
+      $('#play').prop("disabled",false);
+      window.run = false;
+      // turn on link view
+      linkViewOn(sPath);
+    });
+	$("#speed_up").click(function(){
+		$("#speed").val(parseInt($("#speed").val())+5+"%");
+	});
+	$("#speed_down").click(function(){
+		$("#speed").val(parseInt($("#speed").val())-5+"%");
+	});
+	$("#first").click(function(){
+		window.index_g = 0;
+		clearGraph(start);
+	});
+	$("#last").click(function(){
+		window.index_g = cities.length-1;
+		clearGraph(draw);
+	});
+	$('#play').prop("disabled",true);
+	$('#stop').prop("disabled",true);
+	$('#speed_up').prop("disabled",true);
+	$('#speed_down').prop("disabled",true);
+	$('#first').prop("disabled",true);
+	$('#last').prop("disabled",true);
+</script>

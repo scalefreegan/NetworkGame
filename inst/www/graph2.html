@@ -1,0 +1,35 @@
+<div>
+<div class="row">
+  <div class="col-md-12"><svg id="graph2_svg" height="200px" width="396px"></div>
+</div>
+<div class="row">
+  <div class="col-md-12" style="text-align:center;margin-bottom: 40px;">
+    <div class="btn-group" style="bottom:25px; left:25px">
+      <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" style="font-size:10px;padding: 5px 24px">Option <span class="caret"></span></button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a class="button-sub" >Degree (Connectedness)</a></li>
+        <li><a class="button-sub" >Betweeness</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+//Generate some nice data.
+g2_exampleData = function(i) {
+  return stream_layers(i,10+Math.random()*100,.1).map(function(data, i) {
+    return {
+      key: 'Stream #' + i,
+      values: data
+    };
+  });
+}
+g2_data = g2_exampleData(3);
+
+$("#graph2 .button-sub").click(function(){
+  $("#graph2 button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>");
+});
+
+</script>

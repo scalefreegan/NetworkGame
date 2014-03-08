@@ -1,3 +1,8 @@
+// //DELETE THIS BEFORE DEPLOYING: STATIC FILE
+// d3.json("./data/graph.json", function(data) {
+//   graph = data;
+// });
+
 var g_index = 0,
     t_time = 200,
     run = true,
@@ -48,9 +53,7 @@ var right_panel = jumbo_row.append("div")
 
 var right_panel_leader = right_panel.append("div")
   .attr("id","right_panel_leader")
-  .attr("class","col-md-10")
-
-$("#right_panel_leader").html("<p>something here</p><p>two lines</p>");
+  .attr("class","col-md-12")
 
 var w = parseInt(parseInt($("#right_panel").css("width"))*.8),
     h = parseInt(w/1.6),
@@ -65,6 +68,14 @@ var projection = d3.geo.azimuthal()
     .scale(parseInt(w*1.35))
     //.translate([w/1.8, h/1.9]);
     .translate([parseInt(w/2), parseInt(h/2)]);
+
+// var projection = d3.geo.albers()
+//     //.rotate([96, 0])
+//     .center([-.6, 38.7])
+//     .parallels([29.5, 45.5])
+//     .scale(1070)
+//     .translate([w / 2, h / 2])
+//     .precision(.1);
 
 var cityScale = d3.scale.linear()
     .domain([10000, 10000000])
@@ -110,12 +121,6 @@ var circles = svg.append("svg:g")
 
 var cells = svg.append("svg:g")
     .attr("id", "cells");
-
-
-// //DELETE THIS BEFORE DEPLOYING: STATIC FILE
-// d3.json("./data/graph.json", function(data) {
-//   graph = data;
-// });
 
 function drawStates(callback) {
     d3.json("./data/us-states.json", function(collection) {
@@ -270,7 +275,6 @@ function start(where,cities,graph) {
       index_g = where || 0;
       var t;
       function startDraw(){
-        //debugger;
         //handle stupidity
         var tmp_speed = parseInt($("#speed").val());
         tmp_speed = isNaN(tmp_speed) ? 10 : tmp_speed;
@@ -281,21 +285,18 @@ function start(where,cities,graph) {
               positions_now;
           cities_now = dataGivenIndex(index_g,cities,graph,cityNetwork,cityName2Ind);
           positions_now = dataGivenIndex(index_g,positions,graph,cityNetwork,cityName2Ind);
-          //debugger;
           draw(cities_now,positions_now,locationByCity,
           linksByCity,countByCity,cities);
-          //console.log(index);
           t = setTimeout(function(){
             startDraw();
           },t_time); 
         } else if (run==true && index_g==graph.names.length+1){
-          //debugger;
           var tmpcircles = d3.selectAll("circle");
           tmpcircles[[0]].forEach(function(d){lastCircleColors[d.id]=d.style.fill});
           tmpcircles[[0]].forEach(function(d){lastCircleR[d.id]=d.getAttribute("r")});
-          //debugger;
-          bootbox.alert("<p>Your network is ready to score.</p><p>When you're ready, click the 'Score button'</p>", function() {
-              $("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("score_button.html"));
+          bootbox.alert("<p>Your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance by clicking the 'play' button.</p>", function() {
+              $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
+              $("#playbuttons").load("playbuttons.html");
               linkViewOn();
             }); 
         } else {
@@ -402,8 +403,9 @@ function colorSPath(sPath) {
         strokeWidth:5
       });
   }
-  $("#Ostart").text(sPath[0]).css({color:"green"});
-  $("#Ostop").text(sPath[sPath.length-1]).css({color:"red"})
+  $("#Ostart").text(sPath[0]+ " ").css({color:"green"});
+  $("#right_arrow").show();
+  $("#Ostop").text(" " +sPath[sPath.length-1]).css({color:"red"});
 }
 
 function dataGivenIndex(index_d,data,graph,cityNetwork,cityName2Ind) {
@@ -519,7 +521,6 @@ function clearGraph(callback,sPath){
     callback(cities_now,positions_now,locationByCity,linksByCity,countByCity,cities);
     colorSPath(sPath);
   } else if (callback==start){
-    console.log("it was start");
     callback(0,cities,graph);
   }
   
@@ -533,16 +534,11 @@ function score(where) {
       sPath = [];
   
   function pretendKill(ind,cityUpdate,positionUpdate,currentCities,callback) {
-    //console.log("pretendKill");
     // show shortest path 
     sPath = [];
-    //debugger;
     (graph.game[ind].paths.split(" ")).forEach(function(d){sPath.push(cityGraphName2Name["\'"+d+"\'"])});
-    //debugger;
     linkViewOff(sPath);
     colorSPath(sPath);
-    // d3.selectAll("circle")
-    //     .style("fill",function(d){lastCircleColors[d.altName];});
     if (k_ind<(nRand+2) && run == true) {
       if (k_ind<nRand) {
         // select a random city
@@ -558,9 +554,6 @@ function score(where) {
         tmp_circles.css({
           fill : orangeTored(k_ind)
         });
-        // tmp_circles.attr({
-        //   r : cityScaleScore(k_ind)
-        // });
         tmp_paths.css({
           stroke: orangeTored(k_ind),
           opacity:1,
@@ -569,8 +562,6 @@ function score(where) {
       } else if (k_ind==(nRand)) {
         callback(cityGraphName2Name["\'"+parseInt(graph.game[ind].removed)+"\'"],cityUpdate,positionUpdate);
       } else {
-        //debugger;
-        console.log("I am a delay!")
       }
       k_ind = k_ind+1;
       t2 = setTimeout(function(){
@@ -586,14 +577,11 @@ function score(where) {
   }
   function Kill(city,cityUpdate,positionUpdate) {
     removeCity = city;
-    console.log("Kill");
     d3.select("#current_age").text("SHUTTING DOWN " + city).style("color",orangeTored(k_ind)).style("font-size","24");
     // remove city from cityUpdate and positonUpdate
-    //debugger;
     var cityInd = cityName2Ind_update[city];
     cityUpdate.splice(cityInd,1);
     positionUpdate.splice(cityInd,1);
-    //debugger;
     tmp=$(':regex(id,^'+ city +')');
     tmp_circles = tmp.filter("circle");
     tmp_paths = tmp.filter("path");
@@ -608,7 +596,6 @@ function score(where) {
       opacity:1,
       strokeWidth:5
     });
-    //debugger;
     draw(cityUpdate,positionUpdate,locationByCity,
               linksByCity,countByCity,cities,sPath,true,removeCity);
     score_ind = score_ind+1;
@@ -618,10 +605,7 @@ function score(where) {
     if (score_ind>0) {
       // look to previous graph
       if (graph.game[score_ind].paths!=graph.game[score_ind-1].paths) {
-        console.log("redraw!")
         // this means you need a redraw
-        //debugger;
-        //linkViewOff(sPath)
         clearGraph(draw,sPath);
       } 
     } 
@@ -640,22 +624,18 @@ function score(where) {
         tmp_speed = isNaN(tmp_speed) ? 10 : tmp_speed;
         t_time = parseInt(speedScale(tmp_speed));
     if (score_ind<=graph.game.length) {
-    //if (score_ind<=13) {
-      console.log("runItALL");
       checkStatus(score_ind);
       k_ind = 0;
       // select random cities
       var currentCities = [];
       var citySelection = $("circle");
       for (var i = 0; i < citySelection.length; i++) {
-        //debugger;
         currentCities.push(citySelection[i].getAttribute("id"));
       }
       cityName2Ind_update = updateCityName2Ind(cityUpdate);
       pretendKill(score_ind,cities,positions,currentCities,Kill);
       
     } else {
-      console.log("done");
       linkViewOn(sPath);
     }
   }
@@ -787,7 +767,6 @@ function draw(cities_sub,positions,locationByCity,linksByCity,countByCity,allCit
       })
       .style("opacity",function(d){
         if (sPath.indexOf(d.source)==-1 && sPath.indexOf(d.target)==-1) {
-          console.log("I should be" + dPathOpacity + d.source);
           return dPathOpacity;
         } else {
           return $(this).css("opacity");
@@ -835,6 +814,22 @@ function draw(cities_sub,positions,locationByCity,linksByCity,countByCity,allCit
     .attr("r",0)
     .style("opacity",0)
     .remove();
+}
+
+function loadjscssfile(filename, filetype){
+ if (filetype=="js"){ //if filename is a external JavaScript file
+  var fileref=document.createElement('script')
+  fileref.setAttribute("type","text/javascript")
+  fileref.setAttribute("src", filename)
+ }
+ else if (filetype=="css"){ //if filename is an external CSS file
+  var fileref=document.createElement("link")
+  fileref.setAttribute("rel", "stylesheet")
+  fileref.setAttribute("type", "text/css")
+  fileref.setAttribute("href", filename)
+ }
+ if (typeof fileref!="undefined")
+  document.getElementsByTagName("head")[0].appendChild(fileref)
 }
 
   

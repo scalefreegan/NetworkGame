@@ -1,6 +1,21 @@
-<button type='button' class='btn btn-danger' id='score_network'>Score</button>
+<button type='button' class='btn btn-danger btn-sm' id='score_network' style="font-size:14px;padding: 5px 24px">Show simulation</button>
 
 <script>
+$("#score_network").click(function () {
+    $("#right_panel_leader").load("connection.html");
+    $("#progress_bar_text").text("%Remaining");
+    $("#score_network").prop("disabled",true);
+    $('#play').prop("disabled",true);
+    $('#stop').prop("disabled",false);
+    $('#speed_up').prop("disabled",false);
+    $('#speed_down').prop("disabled",false);
+    $('#first').prop("disabled",true);
+    $('#last').prop("disabled",true);
+    // altered play/stop button fcns
+    linkViewOff();
+    cityUpdate = cities;
+    score((cities.length+1));
+});
 var expand_panel = svg.append("svg:g")
   .attr("id","expand");
 
@@ -13,15 +28,7 @@ var expand_panel_rect = expand_panel.append("svg:rect")
     .style("fill","blue")
     .style("opacity","0.001")
     .on("click",function(){
-      // update middle panel
-      right_panel.transition().duration(t_time)
-        .attr("class","col-md-7");
-      var score_panel = jumbo_row.append("div")
-        .attr("class","col-md-3")
-        .attr("id","score_panel");
-      // remove this panel
-      $("#panel_rect").hide();
-      $("#panel_tri").hide();
+      moveStuff(drawStuff);
     })
     .on("mouseover",function(d){
       $("#panel_tri").css("opacity","0.9");
@@ -40,15 +47,7 @@ var expand_panel_triangle = expand_panel.append("svg:polyline")
     .style("stroke-width","6")
     .style("opacity","0.5")
     .on("click",function(){
-      // update middle panel
-      right_panel.transition().duration(t_time)
-        .attr("class","col-md-6");
-      var score_panel = jumbo_row.append("div")
-        .attr("class","col-md-6")
-        .attr("id","score_panel");
-      // remove this panel
-      //$("#panel_rect").hide();
-      $("#panel_tri").hide();
+      moveStuff(drawStuff);
     })
     .on("mouseover",function(d){
       this.style.opacity="0.9"
@@ -75,38 +74,54 @@ $("#panel_tri").qtip({ // Grab some elements to apply the tooltip to
                 delay:1000
               },
               hide: {
-                event: "click"
+                target: $("#panel_tri, #panel_rect"),
+                event: "click",
+                inactive: 10000
               }
           });
 
+moveStuff = function(callback) {
+  createPanels = function(callback){
+    // loadjscssfile("./scripts/graph1.js", "js");
+    // loadjscssfile("./scripts/graph2.js", "js");
+    // loadjscssfile("./scripts/graph3.js", "js");
+    // make the panels to add graphs 
+    var graph1 = score_panel.append("div")
+      .attr("id","graph1")
+      .attr("class","col-md-12")
+      .style("margin-top","20px");
+    var graph2 = score_panel.append("div")
+      .attr("id","graph2")
+      .attr("class","col-md-12");
+    var graph3 = score_panel.append("div")
+      .attr("id","graph3")
+      .attr("class","col-md-12");
+    var w = parseInt(parseInt($("#graph1").css("width"))*.8),
+        h = parseInt(w/1.5);
+    $("#graph1").load("graph1.html",function(){initGraph1();});
+    $("#graph2").load("graph2.html",function(){drawGraph2(g2_data);});
+    $("#graph3").load("graph3.html",function(){drawGraph3(g3_data);});
+    callback();
+  }
+  $("#left_panel").insertBefore("#right_panel_leader");
+  $("#left_panel").attr("class","col-md-12");
+  var score_panel = jumbo_row.append("div")
+    .attr("class","col-md-6")
+    .attr("id","score_panel");
+  // remove this panel
+  $("#panel_rect").hide();
+  $("#panel_tri").hide();
+  $("#right_panel").toggleClass( "col-md-6", 1000,function(){
+    // load javascript and css required for draw
+    loadjscssfile("./scripts/nv.d3.min.js", "js");
+    loadjscssfile("./scripts/stream_layers.js", "js");
+    loadjscssfile("./css/nv.d3.css", "css");
+    createPanels(callback);
+  });
+}
 
-$("#score_network").click(function () {
-    $("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("connection.html"));
-    $("#progress_bar_text").text("%Remaining");
-    $("#score_network").prop("disabled",true);
-    $('#play').prop("disabled",true);
-    $('#stop').prop("disabled",false);
-    $('#speed_up').prop("disabled",false);
-    $('#speed_down').prop("disabled",false);
-    $('#first').prop("disabled",true);
-    $('#last').prop("disabled",true);
-    // altered play/stop button fcns
-    $("#play").click(function(){
-        $('#play').prop("disabled",true);
-        $('#stop').prop("disabled",false);
-        window.run = true;
-        //debugger;
-        score(window.index_g);
-    });
-    $("#stop").click(function(){
-      $('#stop').prop("disabled",true);
-      $('#play').prop("disabled",false);
-      window.run = false;
-      // turn on link view
-      linkViewOn(sPath);
-    });
-    linkViewOff();
-    cityUpdate = cities;
-    score((cities.length+1));
-});
+drawStuff = function() {
+  //initGraph1();
+}
+
 </script>

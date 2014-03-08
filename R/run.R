@@ -1,4 +1,4 @@
-run <- function(n,chance,popularity,age,nRuns,uName) {
+run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 	require(jsonlite)
 	require(RPostgreSQL)
 	to.r <- list()
@@ -25,38 +25,46 @@ run <- function(n,chance,popularity,age,nRuns,uName) {
 	# R. Cohen, K. Erez, D. ben-Avraham, S. Havlin Resilience of the Internet to random breakdowns Phys Rev Lett, 85 (2007), p. 4626
 	to.r$results_score2 <- 1/((1/(length(to.r$names)-1))*(sum(max(to.r$betweeness)-to.r$betweeness)))
 	# L.C. Freeman. A set of measures of centrality based on betweenness. Sociometry, 40 (1) (1977), pp. 35–41
+	
 	to.r$links <- makeAdjacencyMatrix(to.r$g)
 	to.r$graph.tor <- paste(paste(to.r$links[,1],to.r$links[,2],sep=","),collapse=";")
 
-	# writeToJSON <- function(x,filename) {
-	# 	towrite <- list(
-	# 		names = x$names,
-	# 		links = as.data.frame(x$links),
-	# 		game = as.data.frame(x$results),
-	# 		score = x$results_score
-	# 		)
-	# 	towrite <- toJSON(towrite, pretty=TRUE)
-	# 	write(towrite,file=filename)
-	# }
-	# writeToJSON(to.r,"~/Desktop/graph.json")
-	# connect and write to database
-	drv <- dbDriver("PostgreSQL")
-	con <- dbConnect(drv, dbname="nihnetworks")
-	formatted_vals = paste(paste("'",uName,"'",sep=""),n,chance,popularity,age,to.r$results_score1,
-		to.r$results_score2,paste("'",paste(to.r$degree,collapse=","),"'",sep=""),
-		paste("'",paste(to.r$betweeness,collapse=","),"'",sep=""),
-		paste("'",to.r$graph.tor,"'",sep=""),sep=",")
-	#formatted_vals = "'ab',25,1,2,3,1,2,'1,2','1,2','1,2'"
-	dbGetQuery(con, "BEGIN TRANSACTION")
-		rs <- dbSendQuery(con,
-			paste("Insert into networks (user_name,n_node,chance_val,popularity_val,age_val,score_1,score_2,degree_dist,betweenness,network) values (",formatted_vals,")",sep=""))
-		if(dbGetInfo(rs, what = "rowsAffected") > 1){
-			warning("Rolling back transaction")
-			dbRollback(con)
-		}else{
-			dbCommit(con)
+	writeToJSON <- function(x,filename) {
+		towrite <- list(
+						names = x$names,
+						links = as.data.frame(x$links),
+						game = as.data.frame(x$results),
+						score1 = x$results_score1,
+						score1_all = hist(getAll("score_1")[[1]][,1])
+
+						score2 = x$results_score2,
+						degree_distribution = x$degree,
+						degree_distribution_best = as.data.frame(getHigh("degree_dist,user_name","score_1"))
+						betweeness = x$betweeness = as.data.frame(getHigh("betweenness,user_name","score_1"))
+
+						)
+		towrite <- toJSON(towrite, pretty=TRUE)
+		write(towrite,file=filename)
 	}
-	dbDisconnect(con)
+	writeToJSON(to.r,"/isb-1/graph.json")
+	# # connect and write to database
+	# drv <- dbDriver("PostgreSQL")
+	# con <- dbConnect(drv, dbname="nihnetworks")
+	# formatted_vals = paste(paste("'",uName,"'",sep=""),n,chance,popularity,age,to.r$results_score1,
+	# 	to.r$results_score2,paste("'",paste(to.r$degree,collapse=","),"'",sep=""),
+	# 	paste("'",paste(to.r$betweeness,collapse=","),"'",sep=""),
+	# 	paste("'",to.r$graph.tor,"'",sep=""),sep=",")
+	# #formatted_vals = "'ab',25,1,2,3,1,2,'1,2','1,2','1,2'"
+	# dbGetQuery(con, "BEGIN TRANSACTION")
+	# 	rs <- dbSendQuery(con,
+	# 		paste("Insert into networks (user_name,n_node,chance_val,popularity_val,age_val,score_1,score_2,degree_dist,betweenness,network) values (",formatted_vals,")",sep=""))
+	# 	if(dbGetInfo(rs, what = "rowsAffected") > 1){
+	# 		warning("Rolling back transaction")
+	# 		dbRollback(con)
+	# 	}else{
+	# 		dbCommit(con)
+	# }
+	# dbDisconnect(con)
 	# dbGetQuery(con,"select * from networks")
 	# dbListFields(con,"networks")
 	return(to.r)

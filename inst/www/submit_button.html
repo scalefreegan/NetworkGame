@@ -1,4 +1,4 @@
-<button type='button' class='btn btn-danger' id='go_network'>Go!</button>
+<button type='button' class='btn btn-danger' id='go_network' style="padding: 8px 12px">Go!</button>
 
 <script>
 // spinner 
@@ -33,7 +33,7 @@ $("#go_network").click(function () {
             //debugger;
             $('#go_network').prop("disabled",true);
       		$("#go_network").text("loading")
-            //here's where i need to run the r stuff
+      //       //here's where i need to run the r stuff
             var req = ocpu.call("run", {
 		        n : 150,
 		        chance : parseInt($("#sl1").prop("value")), 
@@ -50,12 +50,14 @@ $("#go_network").click(function () {
 		    function datainfo(callback){
 		    	ocpu.rpc("writeJSON", {x : dataframe}, function(jsondata){
 			      graph = jsondata;
+			   	$("#go_network").text("loaded")
 			      callback(cityDataParse);
 			    }).fail(function(jqXHR){
 			      alert(jqXHR.responseText);
 			    });
 		    }
-		    //doTour2(cityDataParse);
+		    // $("#go_network").text("loaded")
+		    // doTour2(cityDataParse);
             //
       });
 </script>

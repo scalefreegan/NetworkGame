@@ -1,0 +1,44 @@
+<div>
+<div class="row">
+  <div class="col-md-12"><svg id="graph1_svg" height="100px" width="396px"></div>
+</div>
+<div class="row">
+  <div class="col-md-12" style="text-align:center;margin-bottom: 40px;">
+    <div class="btn-group" style="left:25px">
+        <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" style="font-size:10px;padding: 5px 24px">Option <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a class="button-sub" id="g1_s1" title="This score measures how sensitive your network is to RANDOM failure.">Score 1</a></li>
+          <li><a class="button-sub" id="g1_s2" title="This score measures how sensitive your network is to TARGETED failure.">Score 2</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var score1 = d3.range(1000).map(d3.random.bates(10)),
+  score2 = d3.range(1000).map(d3.random.irwinHall(10)),
+  yours1 = score1[Math.round(Math.random()*score1.length)],
+  yours2 = score2[Math.round(Math.random()*score2.length)],
+  bins = 20;
+
+var g1_margin = {top: 10, right: 10, bottom: 30, left: 100},
+    g1_width = parseInt($("#graph1_svg").css("width")) - g1_margin.left - g1_margin.right,
+    g1_height = parseInt($("#graph1_svg").css("height")) - g1_margin.top - g1_margin.bottom;
+
+// A formatter for counts.
+var formatCount = d3.format(",.00f");
+var formatCount2 = d3.format(",.02f");
+
+$("#graph1 button").html("Score 1 <span class='caret'></span>")
+  $("#graph1 .button-sub").click(function(){
+    $("button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>");
+    if (this.getAttribute("id")=="g1_s1") {
+      redrawHist(score1,20,yours1,g1_margin,g1_width,g1_height);
+    } else if (this.getAttribute("id")=="g1_s2") {
+      //debugger;
+      redrawHist(score2,20,yours2,g1_margin,g1_width,g1_height);
+    }
+});
+
+</script>
