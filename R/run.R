@@ -29,24 +29,24 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 	to.r$links <- makeAdjacencyMatrix(to.r$g)
 	to.r$graph.tor <- paste(paste(to.r$links[,1],to.r$links[,2],sep=","),collapse=";")
 
-	writeToJSON <- function(x,filename) {
-		towrite <- list(
-						names = x$names,
-						links = as.data.frame(x$links),
-						game = as.data.frame(x$results),
-						score1 = x$results_score1,
-						score1_all = hist(getAll("score_1")[[1]][,1])
+	# writeToJSON <- function(x,filename) {
+	# 	towrite <- list(
+	# 					names = x$names,
+	# 					links = as.data.frame(x$links),
+	# 					game = as.data.frame(x$results),
+	# 					score1 = x$results_score1,
+	# 					score1_all = hist(getAll("score_1")[[1]][,1])
 
-						score2 = x$results_score2,
-						degree_distribution = x$degree,
-						degree_distribution_best = as.data.frame(getHigh("degree_dist,user_name","score_1"))
-						betweeness = x$betweeness = as.data.frame(getHigh("betweenness,user_name","score_1"))
+	# 					score2 = x$results_score2,
+	# 					degree_distribution = x$degree,
+	# 					degree_distribution_best = as.data.frame(getHigh("degree_dist,user_name","score_1"))
+	# 					betweeness = x$betweeness = as.data.frame(getHigh("betweenness,user_name","score_1"))
 
-						)
-		towrite <- toJSON(towrite, pretty=TRUE)
-		write(towrite,file=filename)
-	}
-	writeToJSON(to.r,"/isb-1/graph.json")
+	# 					)
+	# 	towrite <- toJSON(towrite, pretty=TRUE)
+	# 	write(towrite,file=filename)
+	# }
+	# writeToJSON(to.r,"/isb-1/graph.json")
 	# # connect and write to database
 	# drv <- dbDriver("PostgreSQL")
 	# con <- dbConnect(drv, dbname="nihnetworks")
