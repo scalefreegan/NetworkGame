@@ -47,8 +47,8 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 		}else{
 			dbCommit(con)
 	}
-	dbDisconnect(con)
-	dbUnloadDriver(drv)
+	# dbDisconnect(con)
+	# dbUnloadDriver(drv)
 	# dbGetQuery(con,"select * from networks")
 	# dbListFields(con,"networks")
 	# data for graph1
