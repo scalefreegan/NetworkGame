@@ -46,8 +46,8 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 			dbRollback(con)
 		}else{
 			dbCommit(con)
-			dbDisconnect(con)
-			dbUnloadDriver(drv)
+			# dbDisconnect(con)
+			# dbUnloadDriver(drv)
 	}
 	# 
 	# 
