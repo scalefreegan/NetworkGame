@@ -6,7 +6,7 @@ getHigh <- function(what,by,db="nihnetworks") {
 	con <- dbConnect(drv, dbname=db)
 	query <- paste("select ", what, " from networks where ", by, " = (select max(", by ,") from networks)",sep="")
 	result <- dbGetQuery(con,query)
-	dbDisconnect(con)
+	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 	dbUnloadDriver(drv)
 	return(list(result))
 }
@@ -17,7 +17,7 @@ getLow <- function(what,by,db="nihnetworks") {
 	con <- dbConnect(drv, dbname=db)
 	query <- paste("select ", what, " from networks where ", by, " = (select min(", by ,") from networks)",sep="")
 	result <- dbGetQuery(con,query)
-	dbDisconnect(con)
+	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 	dbUnloadDriver(drv)
 	return(list(result))
 }
@@ -28,7 +28,7 @@ getYours <- function(what,by="network_id",db="nihnetworks") {
 	con <- dbConnect(drv, dbname=db)
 	query <- paste("select ", what, " from networks order by network_id desc limit 1",sep="")
 	result <- dbGetQuery(con,query)
-	dbDisconnect(con)
+	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 	dbUnloadDriver(drv)
 	return(list(result))
 }
@@ -39,7 +39,7 @@ getAll <- function(what,db="nihnetworks") {
 	con <- dbConnect(drv, dbname=db)
 	query <- paste("select ", what, " from networks",sep="")
 	result <- dbGetQuery(con,query)
-	dbDisconnect(con)
+	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 	dbUnloadDriver(drv)
 	return(list(result))
 }
@@ -77,7 +77,7 @@ compileBasicStatsHist <- function(what,by,db="nihnetworks",hist=F,bins=20){
 		}
 		to.r <- data.frame(key = c("Your Network","Highest Scoring Network","Lowest Scoring Network"))
 		to.r$values = list(yours_f,high_f,low_f)
-		dbDisconnect(con)
+		lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 		dbUnloadDriver(drv)
 		return(to.r)
 }
