@@ -68,8 +68,8 @@ function formatData(xdata, ydata,uInd,hInd) { //# groups,# points per group
     //debugger;
     return data;
 }
-$("#graph3 button.xax").html("Chance <span class='caret'></span>");
-$("#graph3 button.yax").html("Robustness Score <span class='caret'></span>");
+$("#graph3 button.xax").html("Chance <span class='caret'></span>").attr("id","chance");
+$("#graph3 button.yax").html("Robustness Score <span class='caret'></span>").attr("id","score1_nosort");
 g3_data = formatData(chance,score1_nosort,chance.length-1,high_ind);
 $("#graph3 .button-sub.xax").click(function(){
   //debugger;
