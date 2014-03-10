@@ -5,8 +5,10 @@ drawGraph3 = function(score) {
                   .showDistX(true)    //showDist, when true, will display those little distribution lines on the axis.
                   .showDistY(true)
                   .transitionDuration(350)
-                  .color(d3.scale.category10().range())
-                  .margin({top: 30, right: 20, bottom: 50, left: 40});
+                  .color(["rgb(255, 127, 14)","rgb(44, 160, 44)","rgb(31, 119, 180)"])
+                  .margin({top: 30, right: 20, bottom: 50, left: 40})
+                  .showLegend(true)
+                  .transitionDuration(1000);
    
     //Configure how the tooltip looks.
     chart.tooltipContent(function(key) {

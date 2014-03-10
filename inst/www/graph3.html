@@ -2,14 +2,14 @@
   <div class="row">
     <div class="col-md-2 rotate" style="text-align:center">
       <div class="btn-group dropup" style="top:35px;right:110px">
-        <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" style="font-size:10px;padding: 5px 24px">First option <span class="caret"></span></button>
+        <button type="button" class="btn btn-default btn-md dropdown-toggle yax" data-toggle="dropdown" style="font-size:10px;padding: 5px 24px">First option <span class="caret"></span></button>
         <ul class="dropdown-menu pull-right rotate2" role="menu">
-          <li><a class="button-sub" >Chance</a></li>
-          <li><a class="button-sub" >Popularity</a></li>
-          <li><a class="button-sub" >Age</a></li>
+          <li><a class="button-sub yax" id = "chance">Chance</a></li>
+          <li><a class="button-sub yax" id = "popularity">Popularity</a></li>
+          <li><a class="button-sub yax" id = "age">Age</a></li>
           <li class="divider"></li>
-          <li><a class="button-sub" >Score 1</a></li>
-          <li><a class="button-sub" >Score 2</a></li>
+          <li><a class="button-sub yax" id = "score1_nosort">Robustness Score</a></li>
+          <li><a class="button-sub yax" id = "score2_nosort">Targeted Sensitivity</a></li>
         </ul>
       </div>
     </div>
@@ -20,14 +20,14 @@
     <div class="col-md-2"></div>
     <div class="col-md-10" style="text-align:center">
       <div class="btn-group dropup" style="left:0px">
-        <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" style="font-size:10px;padding: 5px 24px">Second Option <span class="caret"></span></button>
+        <button type="button" class="btn btn-default btn-md dropdown-toggle xax" data-toggle="dropdown" style="font-size:10px;padding: 5px 24px">Second Option <span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu">
-          <li><a class="button-sub" >Chance</a></li>
-          <li><a class="button-sub" >Popularity</a></li>
-          <li><a class="button-sub" >Age</a></li>
+          <li><a class="button-sub xax" id = "chance">Chance</a></li>
+          <li><a class="button-sub xax" id = "popularity">Popularity</a></li>
+          <li><a class="button-sub xax" id = "age">Age</a></li>
           <li class="divider"></li>
-          <li><a class="button-sub" >Score 1</a></li>
-          <li><a class="button-sub" >Score 2</a></li>
+          <li><a class="button-sub xax" id = "score1_nosort">Robustness Score</a></li>
+          <li><a class="button-sub xax" id = "score2_nosort">Targeted Sensitivity</a></li>
         </ul>
       </div>
     </div>
@@ -36,31 +36,47 @@
 
 <script>
 
-function randomData(groups, points) { //# groups,# points per group
-    var data = [],
-        shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
-        random = d3.random.normal();
+function formatData(xdata, ydata,uInd,hInd) { //# groups,# points per group
+    var groups = ["Your Score","High Score","Others"],
+        data = [];
    
-    for (i = 0; i < groups; i++) {
+    for (var i = 0; i < groups.length; i++) {
       data.push({
-        key: 'Group ' + i,
+        key: groups[i],
         values: []
       });
-   
-      for (j = 0; j < points; j++) {
-        data[i].values.push({
-          x: random()
-        , y: random()
-        , size: Math.random()   //Configure the size of each scatter point
-        , shape: (Math.random() > 0.95) ? shapes[j % 6] : "circle"  //Configure the shape of each scatter point.
-        });
-      }
     }
    
+    for (j = 0; j < xdata.length; j++) {
+      if (j==hInd) {
+        var i = 1;
+        var size = 1;
+      } else if (j==uInd) {
+        var i = 0;
+        var size = 1;
+      } else {
+        var i = 2;
+        var size = 0.75;
+      }
+      data[i].values.push({
+        x: xdata[j],
+        y: ydata[j],
+        size: size,
+        shape: "circle"  
+      });
+    } 
+    //debugger;
     return data;
-  }
-g3_data = randomData(1,50);
-$("#graph3 .button-sub").click(function(){
-  $("#graph3 button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>"); 
+}
+$("#graph3 button.xax").html("Chance <span class='caret'></span>");
+$("#graph3 button.yax").html("Robustness Score <span class='caret'></span>");
+g3_data = formatData(chance,score1_nosort,chance.length-1,high_ind);
+$("#graph3 .button-sub.xax").click(function(){
+  $("#graph3 button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>");
+  drawGraph3(formatData(eval(this.id),eval($("#graph3 .button-sub.yax").attr("id")),chance.length-1,high_ind));
+});
+$("#graph3 .button-sub.yax").click(function(){
+  $("#graph3 button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>");
+  drawGraph3(formatData(eval($("#graph3 .button-sub.xax").attr("id")),eval(this.id),chance.length-1,high_ind));
 });
 </script>

@@ -1,5 +1,4 @@
 function median(values) {
-   
   values.sort( function(a,b) {return a - b;} );
    
   var half = Math.floor(values.length/2);
@@ -22,6 +21,9 @@ drawGraph1 = function(score,yours,margin,width,height) {
 
   var high = values.sort(function(a,b){return a - b})[values.length-1];
   var low = values.sort(function(a,b){return a - b})[0];
+  // var high = values.indexOf(Array.max(values));
+  // var low = values.indexOf(Array.max(values));
+
 
   //debugger;
   var x = d3.scale.linear()
@@ -101,6 +103,8 @@ drawGraph1 = function(score,yours,margin,width,height) {
 redrawHist = function(values,bins,yours,margin,width,height) {
   var high = values.sort(function(a,b){return a - b})[values.length-1];
   var low = values.sort(function(a,b){return a - b})[0];
+  // var high = values.indexOf(Array.max(values));
+  // var low = values.indexOf(Array.max(values));
 
   var x = d3.scale.linear()
       //.domain([0,1])

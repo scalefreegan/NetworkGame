@@ -99,7 +99,7 @@ moveStuff = function(callback) {
     var w = parseInt(parseInt($("#graph1").css("width"))*.8),
         h = parseInt(w/1.5);
     $("#graph1").load("graph1.html",function(){initGraph1();});
-    $("#graph2").load("graph2.html",function(){drawGraph2(g2_data);});
+    $("#graph2").load("graph2.html",function(){drawGraph2(graph.degree);});
     $("#graph3").load("graph3.html",function(){drawGraph3(g3_data);});
     callback();
   }
@@ -113,8 +113,6 @@ moveStuff = function(callback) {
   $("#panel_tri").hide();
   $("#right_panel").toggleClass( "col-md-6", 1000,function(){
     // load javascript and css required for draw
-    loadjscssfile("./scripts/nv.d3.min.js", "js");
-    loadjscssfile("./scripts/stream_layers.js", "js");
     loadjscssfile("./css/nv.d3.css", "css");
     createPanels(callback);
   });

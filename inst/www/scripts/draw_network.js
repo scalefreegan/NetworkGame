@@ -1,8 +1,3 @@
-// //DELETE THIS BEFORE DEPLOYING: STATIC FILE
-// d3.json("./data/graph.json", function(data) {
-//   graph = data;
-// });
-
 var g_index = 0,
     t_time = 200,
     run = true,
@@ -27,6 +22,9 @@ var cityNetwork = [],
     positionUpdate,
     positionUpdate_obj,
     removeCity;
+
+loadjscssfile("./scripts/nv.d3.min.js", "js");
+loadjscssfile("./scripts/stream_layers.js", "js");
 
 var jumboExit = d3.select(".container .jumbotron");
 
@@ -121,6 +119,43 @@ var circles = svg.append("svg:g")
 
 var cells = svg.append("svg:g")
     .attr("id", "cells");
+
+
+//DELETE THIS BEFORE DEPLOYING: STATIC FILE
+var bins = 20,
+    score1 = [],
+    score1_nosort = [],
+    score2 = [],
+    score2_nosort = [],
+    yours1,
+    yours2,
+    chance = [],
+    popularity = [],
+    age = [],
+    high_ind;
+// d3.json("./data/graph.json", function(data) {
+//   graph = data;
+//   for (var i = 0; i<graph.other_data.length; i++) {
+//     score1.push(graph.other_data[i].score_1);
+//     score1_nosort.push(graph.other_data[i].score_1);
+//     score2.push(graph.other_data[i].score_2);
+//     score2_nosort.push(graph.other_data[i].score_2);
+//     chance.push(graph.other_data[i].chance_val);
+//     popularity.push(graph.other_data[i].popularity_val);
+//     age.push(graph.other_data[i].age_val);
+//     if (i==graph.other_data.length-1) {
+//       yours1 = graph.other_data[i].score_1
+//       yours2 = graph.other_data[i].score_2
+//     }
+//   }
+//   high_ind = score1.indexOf(Array.max(score1));
+// });
+// d3.json("./data/degree2.json", function(data) {
+//   degree = data;
+// });
+// d3.json("./data/betweenness.json", function(data) {
+//   betweenness = data;
+// });
 
 function drawStates(callback) {
     d3.json("./data/us-states.json", function(collection) {
@@ -831,6 +866,14 @@ function loadjscssfile(filename, filetype){
  if (typeof fileref!="undefined")
   document.getElementsByTagName("head")[0].appendChild(fileref)
 }
+
+Array.max = function( array ){
+    return Math.max.apply( Math, array );
+};
+
+Array.min = function( array ){
+    return Math.min.apply( Math, array );
+};
 
   
 
