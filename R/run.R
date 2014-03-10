@@ -48,7 +48,7 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 			dbCommit(con)
 			
 	}
-	dbDisconnect(con)
+	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 	dbUnloadDriver(drv)
 	# dbGetQuery(con,"select * from networks")
 	# dbListFields(con,"networks")
