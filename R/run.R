@@ -49,7 +49,7 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 			
 	}
 	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
-	dbUnloadDriver(drv)
+	#dbUnloadDriver(drv)
 	# dbGetQuery(con,"select * from networks")
 	# dbListFields(con,"networks")
 	# data for graph1
