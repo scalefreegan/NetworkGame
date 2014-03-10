@@ -48,8 +48,8 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 			dbCommit(con)
 			
 	}
-	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
-	dbUnloadDriver(drv)
+	# lapply(dbListConnections(drv),function(i)dbDisconnect(i))
+	# dbUnloadDriver(drv)
 	# dbGetQuery(con,"select * from networks")
 	# dbListFields(con,"networks")
 	# data for graph1
