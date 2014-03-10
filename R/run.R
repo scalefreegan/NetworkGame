@@ -30,26 +30,26 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 	to.r$links <- makeAdjacencyMatrix(to.r$g)
 	to.r$graph.tor <- paste(paste(to.r$links[,1],to.r$links[,2],sep=","),collapse=";")
 
-	# # connect and write to database
-	# drv <- dbDriver("PostgreSQL")
-	# con <- dbConnect(drv, dbname="nihnetworks")
-	# formatted_vals = paste(paste("'",uName,"'",sep=""),n,chance,popularity,age,to.r$results_score1,
-	# 	to.r$results_score2,paste("'",paste(to.r$degree,collapse=","),"'",sep=""),
-	# 	paste("'",paste(to.r$betweeness,collapse=","),"'",sep=""),
-	# 	paste("'",to.r$graph.tor,"'",sep=""),sep=",")
-	# #formatted_vals = "'ab',25,1,2,3,1,2,'1,2','1,2','1,2'"
-	# dbGetQuery(con, "BEGIN TRANSACTION")
-	# 	rs <- dbSendQuery(con,
-	# 		paste("Insert into networks (user_name,n_node,chance_val,popularity_val,age_val,score_1,score_2,degree_dist,betweenness,network) values (",formatted_vals,")",sep=""))
-	# 	if(dbGetInfo(rs, what = "rowsAffected") > 1){
-	# 		warning("Rolling back transaction")
-	# 		dbRollback(con)
-	# 	} else{
-	# 		dbCommit(con)
+	# connect and write to database
+	drv <- dbDriver("PostgreSQL")
+	con <- dbConnect(drv, dbname="nihnetworks")
+	formatted_vals = paste(paste("'",uName,"'",sep=""),n,chance,popularity,age,to.r$results_score1,
+		to.r$results_score2,paste("'",paste(to.r$degree,collapse=","),"'",sep=""),
+		paste("'",paste(to.r$betweeness,collapse=","),"'",sep=""),
+		paste("'",to.r$graph.tor,"'",sep=""),sep=",")
+	#formatted_vals = "'ab',25,1,2,3,1,2,'1,2','1,2','1,2'"
+	dbGetQuery(con, "BEGIN TRANSACTION")
+		rs <- dbSendQuery(con,
+			paste("Insert into networks (user_name,n_node,chance_val,popularity_val,age_val,score_1,score_2,degree_dist,betweenness,network) values (",formatted_vals,")",sep=""))
+		if(dbGetInfo(rs, what = "rowsAffected") > 1){
+			warning("Rolling back transaction")
+			dbRollback(con)
+		} else{
+			dbCommit(con)
 			
-	# }
-	# lapply(dbListConnections(drv),function(i)dbDisconnect(i))
-	# dbUnloadDriver(drv)
+	}
+	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
+	dbUnloadDriver(drv)
 	# dbGetQuery(con,"select * from networks")
 	# dbListFields(con,"networks")
 	# data for graph1
