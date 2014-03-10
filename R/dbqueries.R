@@ -47,6 +47,9 @@ getAll <- function(what,db="nihnetworks") {
 compileBasicStatsHist <- function(what,by,db="nihnetworks",hist=F,bins=20){
 		# compile all vs your score for a measure
 		# format for JSON and plotting in nvd3
+		require(RPostgreSQL)
+		drv <- dbDriver("PostgreSQL")
+		con <- dbConnect(drv, dbname=db)
 		options(stringsAsFactors=FALSE)
 		high = as.numeric(sapply(getHigh(what,by)[[1]][[1]],strsplit,split=",")[[1]])
 		low = as.numeric(sapply(getLow(what,by)[[1]][[1]],strsplit,split=",")[[1]])
