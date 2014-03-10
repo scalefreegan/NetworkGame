@@ -72,11 +72,13 @@ $("#graph3 button.xax").html("Chance <span class='caret'></span>");
 $("#graph3 button.yax").html("Robustness Score <span class='caret'></span>");
 g3_data = formatData(chance,score1_nosort,chance.length-1,high_ind);
 $("#graph3 .button-sub.xax").click(function(){
-  $("#graph3 button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>");
-  drawGraph3(formatData(eval(this.id),eval($("#graph3 .button-sub.yax").attr("id")),chance.length-1,high_ind));
+  //debugger;
+  $("#graph3 button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>").attr("id",this.id);
+  drawGraph3(formatData(eval(this.id),eval($("#graph3 button.yax").attr("id")),chance.length-1,high_ind));
 });
 $("#graph3 .button-sub.yax").click(function(){
-  $("#graph3 button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>");
-  drawGraph3(formatData(eval($("#graph3 .button-sub.xax").attr("id")),eval(this.id),chance.length-1,high_ind));
+  //debugger;
+  $("#graph3 button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>").attr("id",this.id);
+  drawGraph3(formatData(eval($("#graph3 button.xax").attr("id")),eval(this.id),chance.length-1,high_ind));
 });
 </script>

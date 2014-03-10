@@ -2,7 +2,7 @@ drawGraph2 = function(score) {
   DrawIt = function(data) {
     nv.addGraph(function() {
       var chart = nv.models.multiBarChart()
-        .transitionDuration(350)
+        .transitionDuration(500)
         .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
         .rotateLabels(0)      //Angle to rotate x-axis labels.
         .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
@@ -18,6 +18,7 @@ drawGraph2 = function(score) {
    
       d3.select('#graph2_svg')
           .datum(data)
+          .transition().duration(1500)
           .call(chart);
    
       nv.utils.windowResize(chart.update);
