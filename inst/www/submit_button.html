@@ -41,8 +41,9 @@ $("#go_network").click(function () {
 		        age : parseInt($("#sl3").prop("value")),
 		        nRuns: 20,
 		        uName: userName, 
-		    	   breaks:20  
+		    	breaks:20  
 		      }, function(session){
+		      	console.log("I got here!")
 		        dataframe = session;
 		        datainfo(doTour2);
 		      }).fail(function(jqXHR){
