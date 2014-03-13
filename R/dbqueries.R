@@ -44,7 +44,7 @@ getAll <- function(what,db="nihnetworks") {
 	return(list(result))
 }
 
-compileBasicStatsHist <- function(what,by,db="nihnetworks",hist=F,bins=20,restrict=F){
+compileBasicStatsHist <- function(what,by,db="nihnetworks",hist=F,bins=20){
 		# compile all vs your score for a measure
 		# format for JSON and plotting in nvd3
 		require(RPostgreSQL)
@@ -74,11 +74,7 @@ compileBasicStatsHist <- function(what,by,db="nihnetworks",hist=F,bins=20,restri
 			yours_f[,2] <- sapply(yours_f[,1],function(i){sum(yours==i)})
 		}
 		to.r <- data.frame(key = c("Your Network","Highest Scoring Network","Lowest Scoring Network"))
-		if (restrict!=F) {
-			to.r$values = list(yours_f[1:restrict,],high_f[1:restrict,],low_f[1:restrict,])
-		} else {
-			to.r$values = list(yours_f,high_f,low_f)
-		}
+		to.r$values = list(yours_f,high_f,low_f)
 		return(to.r)
 }
 
