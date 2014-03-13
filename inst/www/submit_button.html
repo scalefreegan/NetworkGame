@@ -41,9 +41,23 @@ $("#go_network").click(function () {
 		        age : parseInt($("#sl3").prop("value")),
 		        nRuns: 20,
 		        uName: userName, 
-		    	   breaks:20  
+		    	breaks:20  
 		      }, function(session){
 		        dataframe = session;
+		        for (var i = 0; i<graph.other_data.length; i++) {
+ 						score1.push(graph.other_data[i].score_1);
+ 						score1_nosort.push(graph.other_data[i].score_1);
+ 						score2.push(graph.other_data[i].score_2);
+ 						score2_nosort.push(graph.other_data[i].score_2);
+ 						chance.push(graph.other_data[i].chance_val);
+ 						popularity.push(graph.other_data[i].popularity_val);
+ 						age.push(graph.other_data[i].age_val);
+ 						if (i==graph.other_data.length-1) {
+ 						  yours1 = graph.other_data[i].score_1
+ 						  yours2 = graph.other_data[i].score_2
+ 						}
+ 					}
+   				high_ind = score1.indexOf(Array.max(score1));
 		        datainfo(doTour2);
 		      }).fail(function(jqXHR){
 		        alert(jqXHR.responseText);
