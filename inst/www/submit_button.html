@@ -44,7 +44,14 @@ $("#go_network").click(function () {
 		    	breaks:20  
 		      }, function(session){
 		        dataframe = session;
-		        for (var i = 0; i<graph.other_data.length; i++) {
+		        datainfo(doTour2);
+		      }).fail(function(jqXHR){
+		        alert(jqXHR.responseText);
+		      });
+		    function datainfo(callback){
+		    	ocpu.rpc("writeJSON", {x : dataframe}, function(jsondata){
+			      graph = jsondata;
+			      for (var i = 0; i<graph.other_data.length; i++) {
  						score1.push(graph.other_data[i].score_1);
  						score1_nosort.push(graph.other_data[i].score_1);
  						score2.push(graph.other_data[i].score_2);
@@ -57,14 +64,7 @@ $("#go_network").click(function () {
  						  yours2 = graph.other_data[i].score_2
  						}
  					}
-   				high_ind = score1.indexOf(Array.max(score1));
-		        datainfo(doTour2);
-		      }).fail(function(jqXHR){
-		        alert(jqXHR.responseText);
-		      });
-		    function datainfo(callback){
-		    	ocpu.rpc("writeJSON", {x : dataframe}, function(jsondata){
-			      graph = jsondata;
+   					high_ind = score1.indexOf(Array.max(score1));
 			   	$("#go_network").text("loaded")
 			      callback(cityDataParse);
 			    }).fail(function(jqXHR){
