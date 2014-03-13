@@ -75,9 +75,10 @@ compileBasicStatsHist <- function(what,by,db="nihnetworks",hist=F,bins=20,restri
 		}
 		to.r <- data.frame(key = c("Your Network","Highest Scoring Network","Lowest Scoring Network"))
 		if (restrict!=F) {
-			to.r$values = list(yours_f[1:restrict],high_f[1:restrict],low_f[1:restrict])
+			to.r$values = list(yours_f[1:restrict,],high_f[1:restrict,],low_f[1:restrict,])
+		} else {
+			to.r$values = list(yours_f,high_f,low_f)
 		}
-		to.r$values = list(yours_f,high_f,low_f)
 		return(to.r)
 }
 
