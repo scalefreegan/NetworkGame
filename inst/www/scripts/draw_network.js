@@ -121,7 +121,7 @@ var cells = svg.append("svg:g")
     .attr("id", "cells");
 
 
-
+//DELETE THIS BEFORE DEPLOYING: STATIC FILE
 var bins = 20,
     score1 = [],
     score1_nosort = [],
@@ -133,7 +133,6 @@ var bins = 20,
     popularity = [],
     age = [],
     high_ind;
-////DELETE THIS BEFORE DEPLOYING: STATIC FILE
 // d3.json("./data/graph.json", function(data) {
 //   graph = data;
 //   for (var i = 0; i<graph.other_data.length; i++) {

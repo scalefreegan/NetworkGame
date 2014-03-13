@@ -33,7 +33,7 @@ $("#go_network").click(function () {
             //debugger;
             $('#go_network').prop("disabled",true);
       		$("#go_network").text("loading")
-            //here's where i need to run the r stuff
+      //       //here's where i need to run the r stuff
             var req = ocpu.call("run", {
 		        n : 150,
 		        chance : parseInt($("#sl1").prop("value")), 
