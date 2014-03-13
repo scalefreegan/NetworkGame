@@ -33,7 +33,7 @@ $("#go_network").click(function () {
             //debugger;
             $('#go_network').prop("disabled",true);
       		$("#go_network").text("loading")
-      //       //here's where i need to run the r stuff
+            //here's where i need to run the r stuff
             var req = ocpu.call("run", {
 		        n : 150,
 		        chance : parseInt($("#sl1").prop("value")), 
@@ -41,9 +41,8 @@ $("#go_network").click(function () {
 		        age : parseInt($("#sl3").prop("value")),
 		        nRuns: 20,
 		        uName: userName, 
-		    	breaks:20  
+		    	   breaks:20  
 		      }, function(session){
-		      	console.log("I got here!")
 		        dataframe = session;
 		        datainfo(doTour2);
 		      }).fail(function(jqXHR){
@@ -52,20 +51,6 @@ $("#go_network").click(function () {
 		    function datainfo(callback){
 		    	ocpu.rpc("writeJSON", {x : dataframe}, function(jsondata){
 			      graph = jsondata;
-			      for (var i = 0; i<graph.other_data.length; i++) {
-						score1.push(graph.other_data[i].score_1);
-						score1_nosort.push(graph.other_data[i].score_1);
-						score2.push(graph.other_data[i].score_2);
-						score2_nosort.push(graph.other_data[i].score_2);
-						chance.push(graph.other_data[i].chance_val);
-						popularity.push(graph.other_data[i].popularity_val);
-						age.push(graph.other_data[i].age_val);
-						if (i==graph.other_data.length-1) {
-						  yours1 = graph.other_data[i].score_1
-						  yours2 = graph.other_data[i].score_2
-						}
-					}
-  				high_ind = score1.indexOf(Array.max(score1));
 			   	$("#go_network").text("loaded")
 			      callback(cityDataParse);
 			    }).fail(function(jqXHR){

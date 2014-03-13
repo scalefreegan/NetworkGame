@@ -6,13 +6,13 @@ $('#sl2').slider({
           formater: function(value) {
           	var importance = "not working";
           	if (value<25) {
-          		importance = "Unimportant";
+          		importance = "Don't really care";
           	}
           	else if (value>=25 && value<=75) {
-          		importance = "Somewhat Important";
+          		importance = "Care a little";
           	}
           	else if (value>75) {
-          		importance = "Very Important";
+          		importance = "Prefer Popular";
           	}
             return 'Value: ' + value+', '+importance;
           },

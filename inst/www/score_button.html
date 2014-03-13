@@ -2,19 +2,7 @@
 
 <script>
 $("#score_network").click(function () {
-    $("#right_panel_leader").load("connection.html");
-    $("#progress_bar_text").text("%Remaining");
-    $("#score_network").prop("disabled",true);
-    $('#play').prop("disabled",true);
-    $('#stop').prop("disabled",false);
-    $('#speed_up').prop("disabled",false);
-    $('#speed_down').prop("disabled",false);
-    $('#first').prop("disabled",true);
-    $('#last').prop("disabled",true);
-    // altered play/stop button fcns
-    linkViewOff();
-    cityUpdate = cities;
-    score((cities.length+1));
+    doTour3(score);
 });
 var expand_panel = svg.append("svg:g")
   .attr("id","expand");

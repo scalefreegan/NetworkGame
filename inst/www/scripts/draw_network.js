@@ -121,18 +121,18 @@ var cells = svg.append("svg:g")
     .attr("id", "cells");
 
 
-//DELETE THIS BEFORE DEPLOYING: STATIC FILE
-var bins = 20,
-    score1 = [],
-    score1_nosort = [],
-    score2 = [],
-    score2_nosort = [],
-    yours1,
-    yours2,
-    chance = [],
-    popularity = [],
-    age = [],
-    high_ind;
+// //DELETE THIS BEFORE DEPLOYING: STATIC FILE
+// var bins = 20,
+//     score1 = [],
+//     score1_nosort = [],
+//     score2 = [],
+//     score2_nosort = [],
+//     yours1,
+//     yours2,
+//     chance = [],
+//     popularity = [],
+//     age = [],
+//     high_ind;
 // d3.json("./data/graph.json", function(data) {
 //   graph = data;
 //   for (var i = 0; i<graph.other_data.length; i++) {
@@ -206,7 +206,7 @@ function doTour1() {
           element: "#CA",
           placement: "left",
           title: function(){ return "<b>" + userName + "</b>, your job is to design a robust communication network"; },
-          content: "<p>As the country grows and new cities are established, they need to be connected to pre-exisiting cities. Each year a new city will be established. You choose the rules that determine how that city gets wired into the network.</p><p></p><p>You will select how much influence each of the following has on the design of your network:</p>"
+          content: "<p>As the country grows and new cities are established, they need to be connected to pre-exisiting cities.<p><p>Each year a new city will be established. You choose the rules that determine how that city gets wired into the network.</p><p>You will select how much influence each of the following has on the design of your network:</p>"
         },
         {
           element: "#div_option1",
@@ -218,27 +218,33 @@ function doTour1() {
           element: "#div_option2",
           placement: "right",
           title: "<b>Popularity</b>",
-          content: "<p>Should a new city be connected to a city that already has a lot of connections?</p><p><i>High values mean that <b>popularity</b> is important</i></p>"
+          content: "<p>Should a new city be connected to a city that already has a lot of connections?</p><p><i>High values mean that you have a preference for <b>popular</b> cities</i></p>"
         },
         {
           element: "#div_option3",
           placement: "right",
           title: "<b>Age</b>",
-          content: "<p>Should new cities connect to cities that have been around for a long time?</p><p><i>High values mean that <b>age</b> is important</i></p>"
+          content: "<p>Should new cities connect to cities that have been around for a long time?</p><p><i>High values mean that you are more likely to connect to an <b>old</b> city</i></p>"
         },
         {
           element: "#TX",
           placement: "top",
           backdrop: true,
-          title: "<b>Careful!!!</b>",
-          content: "<p>Your selections matter. Some are more important than others.</p><p>Use your knowledge and intuition to choose the best parameters and win.</p>"
+          title: "<b>Be careful!!!</b>",
+          content: "<p>Your selections matter. Some of these decisions are more important than others.</p><p>Use your knowledge and intuition to select options that will make the network robust to random failure.</p>"
+        },
+        {
+          element: "#CA",
+          placement: "left",
+          title: function(){ return "Remember <b>" + userName + "</b>, your job is to design a <b>robust</b> communication network"; },
+          content: "<p><em>Use these selections to create a network that isn't affected by chance city closure.</em></p>"
         },
         {
           element: "#go_network",
           placement: "right",
           backdrop: false,
           title: "When you're ready...",
-          content: "<p>Press this button.</p><p>After building a network according to your specifications, I will score your network.</p><p>The more <b>robust</b> the <b>better</b>.</p> "
+          content: "<p>Press this button.</p><p>After building a network according to your specifications, I will it.</p><p>The more <b>robust</b> the <b>better</b>.</p> "
         },
       ]);
    
@@ -250,7 +256,6 @@ function doTour1() {
 }
 
 function doTour2(callback) {
-      var name = "Friend"
       var tour = new Tour({
           storage : false,
           onEnd: function (tour) {
@@ -263,17 +268,10 @@ function doTour2(callback) {
    
       tour.addSteps([
         {
-          element: "#go_network",
-          placement: "right",
-          backdrop: false,
-          title: "Here's how I will score your network:",
-          content: "<p>I will ask you to send a message from city <b>A</b> to <b>B</b>.</p><p>Here's where it gets fun... <p>Your cities are going to shut-down by chance. First one. Then another. And then another. And so on.</p><p> The longer your network can get the message from <b>A</b> to <b>B</b>, the higher your score.</p><p>We'll do this 100 times - just to make sure you didn't get unlucky</p><p>Got it?</p>"
-        },
-        {
-          element: "#playbuttons",
-          placement: "bottom",
-          title: "Your score",
-          content: "<p>When I've tallied your score, I will display it here.</p><p>You will be able to see how your network performed compared to everyone else's. You will also be able to compare your network to the top scoring network.</p>"
+          element: "#DE",
+          placement: "left",
+          title: "<b>Great work, "+userName+"!</b>" ,
+          content: "<p>When I've tallied your score, I will display it here.</p><p>You will be able to see how your network performed. You will also be able to compare your network to the top scoring network.</p>"
         },
         {
           element: "#playbuttons",
@@ -283,6 +281,43 @@ function doTour2(callback) {
         },
         ]);
       spinner.stop();
+      // Initialize the tour
+      tour.init();
+   
+      // Start the tour
+      tour.start();
+      
+}
+
+function doTour3(callback) {
+      var tour = new Tour({
+          storage : false,
+          onEnd: function (tour) {
+            $("#right_panel_leader").load("connection.html");
+            $("#progress_bar_text").text("%Remaining");
+            $("#score_network").prop("disabled",true);
+            $('#play').prop("disabled",true);
+            $('#stop').prop("disabled",false);
+            $('#speed_up').prop("disabled",false);
+            $('#speed_down').prop("disabled",false);
+            $('#first').prop("disabled",true);
+            $('#last').prop("disabled",true);
+            // altered play/stop button fcns
+            linkViewOff();
+            cityUpdate = cities;
+            callback((cities.length+1));
+          },
+      });
+   
+      tour.addSteps([
+        {
+          element: "#score_network",
+          placement: "right",
+          backdrop: false,
+          title: userName + ", here's a game related to how your network was scored:",
+          content: "<p>I will ask you to send a message from city <b>A</b> to <b>B</b>.</p><p>Here's where it gets fun... <p>Your cities are going to shut-down by chance. First one. Then another. And then another.</p><p>The game will continue until you can no longer get from <b>A</b> to <b>B</b></p><p>The longer you can get the message from <b>A</b> to <b>B</b>, the higher your network's score.</p><p>Got it?</p>"
+        },
+        ]);
       // Initialize the tour
       tour.init();
    
@@ -329,7 +364,7 @@ function start(where,cities,graph) {
           var tmpcircles = d3.selectAll("circle");
           tmpcircles[[0]].forEach(function(d){lastCircleColors[d.id]=d.style.fill});
           tmpcircles[[0]].forEach(function(d){lastCircleR[d.id]=d.getAttribute("r")});
-          bootbox.alert("<p>Your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance by clicking the 'play' button.</p>", function() {
+          bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance by clicking the <span style='color:red'>Show simulation</span> button.</p>", function() {
               $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
               $("#playbuttons").load("playbuttons.html");
               linkViewOn();

@@ -20,7 +20,7 @@ drawGraph3 = function(score) {
     chart.yAxis.tickFormat(d3.format('.02f'));
    
     //We want to show shapes other than circles.
-    chart.scatter.onlyCircles(false);
+    chart.scatter.onlyCircles(true);
    
     d3.select('#graph3_svg')
         .datum(score)
