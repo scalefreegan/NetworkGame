@@ -55,8 +55,8 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 	# data for graph1
 	
 	# data for graph2
-	to.r$degree <- compileBasicStatsHist("degree_dist",by="score_1",hist=F)
-	to.r$betweenness <- compileBasicStatsHist("betweenness",by="score_1",hist=T,bins=breaks)
+	to.r$degree <- compileBasicStatsHist("degree_dist",by="score_1",hist=F,restrict=20)
+	to.r$betweenness <- compileBasicStatsHist("betweenness",by="score_1",hist=T,bins=breaks,restrict=20)
 	# data for graph3
 	to.r$g3data <- getAll("network_id,user_name,score_1,score_2,chance_val,popularity_val,age_val")[[1]]
 	if (to.r$g3data[dim(to.r$g3data)[1],"score_1"]>=max(to.r$g3data[,"score_1"])) {
