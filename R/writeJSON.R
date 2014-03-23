@@ -42,7 +42,7 @@ writeJSON_topscores <- function(x) {
 				to_r = paste(to_r,badgeother(i,x[i,1]),sep="")
 			}
 	}
-	list(
+	return(list(
 		topscores = x,
-		)
+		))
 }
