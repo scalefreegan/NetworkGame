@@ -43,6 +43,6 @@ writeJSON_topscores <- function(x) {
 			}
 	}
 	return(list(
-		topscores = to_r,
+		topscores = to_r
 		))
 }
