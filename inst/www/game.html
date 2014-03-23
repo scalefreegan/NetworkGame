@@ -36,7 +36,7 @@
       });
     function datainfo(callback){
     	ocpu.rpc("writeJSON_topscores", {x : dataframe}, function(jsondata){
-	      marqueeText = jsondata;
+	      marqueeText = jsondata.topscores;
 	      callback(marqueeText,marqueeIt);
 	    }).fail(function(jqXHR){
 	      alert(jqXHR.responseText);
