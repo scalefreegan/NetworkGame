@@ -17,6 +17,8 @@
     <script type="text/javascript" src="./scripts/spin.min.js"></script>
     <script type="text/javascript" src="./scripts/jquery-ui.js"></script>
     <script type="text/javascript" src="./slider/js/bootstrap-slider.js"></script>
+    <script type="text/javascript" src="./scripts/bootstrap-switch.min.js"></script>
+    <script type="text/javascript" src="./scripts/marquee.js"></script>
     
     <script type="text/javascript" src="./scripts/graph1.js"></script>
     <script type="text/javascript" src="./scripts/graph2.js"></script>
@@ -45,6 +47,7 @@
     <link href="./slider/css/slider.css" rel="stylesheet">
     <link type="text/css" href="./css/jquery.qtip.min.css" rel="stylesheet">
     <link type="text/css" href="./css/bootstrap-tour.min.css" rel="stylesheet">
+    <link type="text/css" href="./css/bootstrap-switch.min.css" rel="stylesheet">
      <!-- <link type="text/css" href="./css/nv.d3.css" rel="stylesheet"> -->
 
 
@@ -144,6 +147,13 @@
         filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
       }
 
+      .alert-white {
+        background-color: white;
+        color: gray;
+        border-color: gray;
+      }
+
+
     </style>
     <title>Communication network</title>
   </head>
@@ -151,8 +161,8 @@
      <div class="container">
       <div class="header">
         <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="./">Home</a></li>
-          <li><a href="#">About</a></li>
+          <li class="active"><a href="./"><span class="glyphicon glyphicon-home"></span>&nbsp&nbspHome</a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp&nbspAbout</a></li>
         </ul>
         <h3 class="text-muted"><strong>Network</strong><em>Challenge</em></h3>
       </div>
@@ -178,7 +188,7 @@
       </div>
 
       <div class="footer">
-        <p>&copy; Aaron Brooks 2014</p>
+        <p>&copy; <a href="http://www.aaron-brooks.org">Aaron Brooks</a> 2014</p>
       </div>
 
     </div> <!-- /container -->

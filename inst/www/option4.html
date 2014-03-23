@@ -1,0 +1,16 @@
+<p style="margin-bottom: 0px;">Network Size</p>
+<!-- <svg id="option3" style="background: none repeat scroll 0% 0% white;" width = "100px" height = "100px" viewBox="0 0 1 1" perserveAspectRatio="xMidYMid meet"></svg> -->
+<div style="margin-bottom: 50px;">
+  <input type="checkbox" name="my-checkbox" id="smallorlarge" data-on-text="Large" data-off-text="Small" unchecked>
+</div>
+<script>
+$("[name='my-checkbox']").bootstrapSwitch();
+$('#smallorlarge').on('click', function(e, data) {
+  if ($("#smallorlarge").is(':checked')) {
+      n_nodes = 150;
+    } else {
+      n_nodes = 5;
+    }
+});
+n_nodes = 5;
+</script>

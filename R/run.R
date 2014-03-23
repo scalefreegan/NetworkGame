@@ -24,7 +24,7 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 	to.r$results_score1 <- 1-(1/(k0-1))
 	# R. Cohen, K. Erez, D. ben-Avraham, S. Havlin Resilience of the Internet to random breakdowns Phys Rev Lett, 85 (2007), p. 4626
 	# i think max score should be < n. subtracting from n will flip the score
-	to.r$results_score2 <- n-((1/(length(to.r$names)-1))*(sum(max(to.r$betweeness)-to.r$betweeness)))
+	to.r$results_score2 <- (((n-1)*(n-2)/2)-(1/(n-1))*(sum(max(to.r$betweeness)-to.r$betweeness)))/((n-1)*(n-2)/2)
 	# L.C. Freeman. A set of measures of centrality based on betweenness. Sociometry, 40 (1) (1977), pp. 35–41
 	
 	to.r$links <- makeAdjacencyMatrix(to.r$g)
@@ -55,28 +55,34 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 	# data for graph1
 	
 	# data for graph2
-	to.r$degree <- compileBasicStatsHist("degree_dist",by="score_1",hist=F)
-	to.r$betweenness <- compileBasicStatsHist("betweenness",by="score_1",hist=T,bins=breaks)
+	to.r$degree <- compileBasicStatsHist("degree_dist",by="score_1",hist=F,n=n)
+	to.r$betweenness <- compileBasicStatsHist("betweenness",by="score_1",hist=T,bins=breaks,n=n)
 	# data for graph3
-	to.r$g3data <- getAll("network_id,user_name,score_1,score_2,chance_val,popularity_val,age_val")[[1]]
+	to.r$g3data <- getAll("network_id,user_name,score_1,score_2,chance_val,popularity_val,age_val",n=n)[[1]]
 	if (to.r$g3data[dim(to.r$g3data)[1],"score_1"]>=max(to.r$g3data[,"score_1"])) {
 		to.r$is_high = T
 	} else {
 		to.r$is_high = F
-	} 
+	}
+	if (dim(to.r$g3data)[1]>50) {
+		highInd = which(to.r$g3data[,"score_1"]==max(to.r$g3data[,"score_1"]))
+		lowInd = which(to.r$g3data[,"score_1"]==min(to.r$g3data[,"score_1"]))
+		sampledInd = sample(seq(1,dim(to.r$g3data)[1]),50)
+		to.r$g3data[sort(unique(c(highInd,lowInd,sampledInd,dim(to.r$g3data)[1]))),]
+	}
 	# writeToJSON <- function(x,filename) {
-		# towrite <- list(
-		# 				names = x$names,
-		# 				links = as.data.frame(x$links),
-		# 				game = as.data.frame(x$results),
-		# 				degree = x$degree,
-		# 				betweenness = x$betweenness,
-		# 				other_data = as.data.frame(x$g3data),
-		# 				is_high = x$is_high
-		# 				)
+	# 	towrite <- list(
+	# 					names = x$names,
+	# 					links = as.data.frame(x$links),
+	# 					game = as.data.frame(x$results),
+	# 					degree = x$degree,
+	# 					betweenness = x$betweenness,
+	# 					other_data = as.data.frame(x$g3data),
+	# 					is_high = x$is_high
+	# 					)
 	# 	towrite <- toJSON(towrite, pretty=TRUE)
 	# 	write(towrite,file=filename)
 	# }
-	# writeToJSON(to.r,"/isb-1/graph.json")
+	# writeToJSON(to.r,"graph_small.json")
 	return(to.r)
 }

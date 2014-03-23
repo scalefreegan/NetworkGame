@@ -1,15 +1,17 @@
 <p style="margin-bottom: 0px;">Age</p>
-<svg id="option3" style="background: none repeat scroll 0% 0% white;" width = "100px" height = "100px" viewBox="0 0 1 1" perserveAspectRatio="xMidYMid meet"></svg>
-<div style="margin-bottom: 25px;"><input type="text" value="50" id="sl3" ></div>
+<!-- <svg id="option3" style="background: none repeat scroll 0% 0% white;" width = "100px" height = "100px" viewBox="0 0 1 1" perserveAspectRatio="xMidYMid meet"></svg> -->
+<div style="margin-bottom: 50px;">
+  <input type="text" value="50" id="sl3" ><b class="pull-left">0</b><b class="pull-right">100</b>
+</div>
 <script>
 $('#sl3').slider({
           formater: function(value) {
           	var importance = "not working";
           	if (value<25) {
-          		importance = "Don't really care";
+          		importance = "Prefer Young";
           	}
           	else if (value>=25 && value<=75) {
-          		importance = "Somewhat important";
+          		importance = "Don't care";
           	}
           	else if (value>75) {
           		importance = "Prefer Old";

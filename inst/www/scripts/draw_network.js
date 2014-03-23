@@ -21,7 +21,8 @@ var cityNetwork = [],
     cityUpdate_obj,
     positionUpdate,
     positionUpdate_obj,
-    removeCity;
+    removeCity,
+    n_nodes;
 
 loadjscssfile("./scripts/nv.d3.min.js", "js");
 loadjscssfile("./scripts/stream_layers.js", "js");
@@ -41,6 +42,8 @@ $("#left_panel").append($("<div id='div_option1'>").load("option1.html"));
 $("#left_panel").append($("<div id='div_option2'>").load("option2.html"));
 
 $("#left_panel").append($("<div id='div_option3'>").load("option3.html"));
+
+$("#left_panel").append($("<div id='div_option3'>").load("option4.html"));
 
 $("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("submit_button.html"));
 
@@ -84,7 +87,7 @@ var cityScaleScore = d3.scale.linear()
     .range([w/50,w/20]);
 
 var cityColorScale = d3.scale.linear()
-    .domain([1, 15])
+    .domain([1, 10])
     .range(["#deebf7","#9ecae1","#3182bd"])
 
 var orangeTored = d3.scale.linear()
@@ -133,29 +136,8 @@ var bins = 20,
     popularity = [],
     age = [],
     high_ind;
-// d3.json("./data/graph.json", function(data) {
-//   graph = data;
-//   for (var i = 0; i<graph.other_data.length; i++) {
-//     score1.push(graph.other_data[i].score_1);
-//     score1_nosort.push(graph.other_data[i].score_1);
-//     score2.push(graph.other_data[i].score_2);
-//     score2_nosort.push(graph.other_data[i].score_2);
-//     chance.push(graph.other_data[i].chance_val);
-//     popularity.push(graph.other_data[i].popularity_val);
-//     age.push(graph.other_data[i].age_val);
-//     if (i==graph.other_data.length-1) {
-//       yours1 = graph.other_data[i].score_1
-//       yours2 = graph.other_data[i].score_2
-//     }
-//   }
-//   high_ind = score1.indexOf(Array.max(score1));
-// });
-// d3.json("./data/degree2.json", function(data) {
-//   degree = data;
-// });
-// d3.json("./data/betweenness.json", function(data) {
-//   betweenness = data;
-// });
+
+
 
 function drawStates(callback) {
     d3.json("./data/us-states.json", function(collection) {
@@ -206,7 +188,7 @@ function doTour1() {
           element: "#CA",
           placement: "left",
           title: function(){ return "<b>" + userName + "</b>, your job is to design a robust communication network"; },
-          content: "<p>As the country grows and new cities are established, they need to be connected to pre-exisiting cities.<p><p>Each year a new city will be established. You choose the rules that determine how that city gets wired into the network.</p><p>You will select how much influence each of the following has on the design of your network:</p>"
+          content: "<p>As the country grows and new cities are established, they need to be connected to pre-exisiting cities.<p><p>Each year a new city will be established. You choose the rules that determine how that city gets wired into the network.</p><p>You will select how much influence each of the following has on the design of your network:</p>",
         },
         {
           element: "#div_option1",
@@ -227,24 +209,24 @@ function doTour1() {
           content: "<p>Should new cities connect to cities that have been around for a long time?</p><p><i>High values mean that you are more likely to connect to an <b>old</b> city</i></p>"
         },
         {
+          element: "#CA",
+          placement: "left",
+          title: function(){ return "<b>" + userName + "</b>, your job is to design a <b>robust</b> communication network"; },
+          content: "<p><em>Try to design a network that isn't affected when one of the cities is removed.</em></p>"
+        },
+        {
           element: "#TX",
           placement: "top",
           backdrop: true,
-          title: "<b>Be careful!!!</b>",
-          content: "<p>Your selections matter. Some of these decisions are more important than others.</p><p>Use your knowledge and intuition to select options that will make the network robust to random failure.</p>"
-        },
-        {
-          element: "#CA",
-          placement: "left",
-          title: function(){ return "Remember <b>" + userName + "</b>, your job is to design a <b>robust</b> communication network"; },
-          content: "<p><em>Use these selections to create a network that isn't affected by chance city closure.</em></p>"
+          title: "<b>Be careful!</b>",
+          content: "<p>Your selections matter. Some are more important than others.</p><p>Use your knowledge and intuition to select options that will make the network robust to random failure.</p>"
         },
         {
           element: "#go_network",
           placement: "right",
           backdrop: false,
           title: "When you're ready...",
-          content: "<p>Press this button.</p><p>After building a network according to your specifications, I will it.</p><p>The more <b>robust</b> the <b>better</b>.</p> "
+          content: "<p>Press this button.</p><p>After building a network according to your specifications, I will score it.</p><p>The more <b>robust</b> the <b>better</b>.</p> "
         },
       ]);
    
@@ -271,7 +253,7 @@ function doTour2(callback) {
           element: "#DE",
           placement: "left",
           title: "<b>Great work, "+userName+"!</b>" ,
-          content: "<p>When I've tallied your score, I will display it here.</p><p>You will be able to see how your network performed. You will also be able to compare your network to the top scoring network.</p>"
+          content: "<p>When I've tallied your score, I will display it here.</p><p>You will be able to see how your network performed compared to others who've played the game. You will also be able to compare your network to the top scoring network.</p>"
         },
         {
           element: "#playbuttons",
@@ -364,7 +346,7 @@ function start(where,cities,graph) {
           var tmpcircles = d3.selectAll("circle");
           tmpcircles[[0]].forEach(function(d){lastCircleColors[d.id]=d.style.fill});
           tmpcircles[[0]].forEach(function(d){lastCircleR[d.id]=d.getAttribute("r")});
-          bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance by clicking the <span style='color:red'>Show simulation</span> button.</p>", function() {
+          bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
               $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
               $("#playbuttons").load("playbuttons.html");
               linkViewOn();

@@ -1,0 +1,481 @@
+{
+	"names" : [
+		"0",
+		"1",
+		"2",
+		"3",
+		"4"
+	],
+	"links" : [
+		{
+			"source" : 1,
+			"target" : 0,
+			"weight" : 1
+		},
+		{
+			"source" : 2,
+			"target" : 0,
+			"weight" : 1
+		},
+		{
+			"source" : 3,
+			"target" : 0,
+			"weight" : 1
+		},
+		{
+			"source" : 4,
+			"target" : 0,
+			"weight" : 1
+		}
+	],
+	"game" : [
+		{
+			"startstop" : "4 1",
+			"paths" : "4 0 1",
+			"removed" : "3"
+		},
+		{
+			"startstop" : "4 1",
+			"paths" : "4 0 1",
+			"removed" : "4"
+		},
+		{
+			"startstop" : "1 3",
+			"paths" : "1 0 3",
+			"removed" : "2"
+		},
+		{
+			"startstop" : "1 3",
+			"paths" : "1 0 3",
+			"removed" : "0"
+		},
+		{
+			"startstop" : "4 2",
+			"paths" : "4 0 2",
+			"removed" : "3"
+		},
+		{
+			"startstop" : "4 2",
+			"paths" : "4 0 2",
+			"removed" : "4"
+		},
+		{
+			"startstop" : "4 2",
+			"paths" : "4 0 2",
+			"removed" : "4"
+		},
+		{
+			"startstop" : "2 1",
+			"paths" : "2 0 1",
+			"removed" : "0"
+		},
+		{
+			"startstop" : "4 1",
+			"paths" : "4 0 1",
+			"removed" : "3"
+		},
+		{
+			"startstop" : "4 1",
+			"paths" : "4 0 1",
+			"removed" : "1"
+		},
+		{
+			"startstop" : "2 1",
+			"paths" : "2 0 1",
+			"removed" : "3"
+		},
+		{
+			"startstop" : "2 1",
+			"paths" : "2 0 1",
+			"removed" : "0"
+		},
+		{
+			"startstop" : "2 4",
+			"paths" : "2 0 4",
+			"removed" : "1"
+		},
+		{
+			"startstop" : "2 4",
+			"paths" : "2 0 4",
+			"removed" : "2"
+		},
+		{
+			"startstop" : "1 4",
+			"paths" : "1 0 4",
+			"removed" : "0"
+		},
+		{
+			"startstop" : "4 1",
+			"paths" : "4 0 1",
+			"removed" : "3"
+		},
+		{
+			"startstop" : "4 1",
+			"paths" : "4 0 1",
+			"removed" : "2"
+		},
+		{
+			"startstop" : "4 1",
+			"paths" : "4 0 1",
+			"removed" : "0"
+		},
+		{
+			"startstop" : "2 0",
+			"paths" : "2 0",
+			"removed" : "2"
+		},
+		{
+			"startstop" : "3 4",
+			"paths" : "3 0 4",
+			"removed" : "1"
+		},
+		{
+			"startstop" : "3 4",
+			"paths" : "3 0 4",
+			"removed" : "0"
+		},
+		{
+			"startstop" : "1 4",
+			"paths" : "1 0 4",
+			"removed" : "2"
+		},
+		{
+			"startstop" : "1 4",
+			"paths" : "1 0 4",
+			"removed" : "3"
+		},
+		{
+			"startstop" : "1 4",
+			"paths" : "1 0 4",
+			"removed" : "0"
+		},
+		{
+			"startstop" : "2 0",
+			"paths" : "2 0",
+			"removed" : "3"
+		},
+		{
+			"startstop" : "2 0",
+			"paths" : "2 0",
+			"removed" : "2"
+		},
+		{
+			"startstop" : "2 3",
+			"paths" : "2 0 3",
+			"removed" : "4"
+		},
+		{
+			"startstop" : "2 3",
+			"paths" : "2 0 3",
+			"removed" : "1"
+		},
+		{
+			"startstop" : "2 3",
+			"paths" : "2 0 3",
+			"removed" : "3"
+		},
+		{
+			"startstop" : "1 2",
+			"paths" : "1 0 2",
+			"removed" : "0"
+		},
+		{
+			"startstop" : "3 0",
+			"paths" : "3 0",
+			"removed" : "1"
+		},
+		{
+			"startstop" : "3 0",
+			"paths" : "3 0",
+			"removed" : "4"
+		},
+		{
+			"startstop" : "3 0",
+			"paths" : "3 0",
+			"removed" : "2"
+		},
+		{
+			"startstop" : "3 0",
+			"paths" : "3 0",
+			"removed" : "0"
+		},
+		{
+			"startstop" : "2 1",
+			"paths" : "2 0 1",
+			"removed" : "2"
+		},
+		{
+			"startstop" : "4 2",
+			"paths" : "4 0 2",
+			"removed" : "4"
+		},
+		{
+			"startstop" : "1 4",
+			"paths" : "1 0 4",
+			"removed" : "3"
+		},
+		{
+			"startstop" : "1 4",
+			"paths" : "1 0 4",
+			"removed" : "1"
+		}
+	],
+	"degree" : [
+		{
+			"key" : "Your Network",
+			"values" : [
+				{
+					"x" : 1,
+					"y" : 4
+				},
+				{
+					"x" : 2,
+					"y" : 0
+				},
+				{
+					"x" : 3,
+					"y" : 0
+				},
+				{
+					"x" : 4,
+					"y" : 1
+				}
+			]
+		},
+		{
+			"key" : "Highest Scoring Network",
+			"values" : [
+				{
+					"x" : 1,
+					"y" : 4
+				},
+				{
+					"x" : 2,
+					"y" : 0
+				},
+				{
+					"x" : 3,
+					"y" : 0
+				},
+				{
+					"x" : 4,
+					"y" : 1
+				}
+			]
+		},
+		{
+			"key" : "Lowest Scoring Network",
+			"values" : [
+				{
+					"x" : 1,
+					"y" : 4
+				},
+				{
+					"x" : 2,
+					"y" : 0
+				},
+				{
+					"x" : 3,
+					"y" : 0
+				},
+				{
+					"x" : 4,
+					"y" : 1
+				}
+			]
+		}
+	],
+	"betweenness" : [
+		{
+			"key" : "Your Network",
+			"values" : [
+				{
+					"x" : 0.25,
+					"y" : 4
+				},
+				{
+					"x" : 0.75,
+					"y" : 0
+				},
+				{
+					"x" : 1.25,
+					"y" : 0
+				},
+				{
+					"x" : 1.75,
+					"y" : 0
+				},
+				{
+					"x" : 2.25,
+					"y" : 0
+				},
+				{
+					"x" : 2.75,
+					"y" : 0
+				},
+				{
+					"x" : 3.25,
+					"y" : 0
+				},
+				{
+					"x" : 3.75,
+					"y" : 0
+				},
+				{
+					"x" : 4.25,
+					"y" : 0
+				},
+				{
+					"x" : 4.75,
+					"y" : 0
+				},
+				{
+					"x" : 5.25,
+					"y" : 0
+				},
+				{
+					"x" : 5.75,
+					"y" : 1
+				}
+			]
+		},
+		{
+			"key" : "Highest Scoring Network",
+			"values" : [
+				{
+					"x" : 0.25,
+					"y" : 4
+				},
+				{
+					"x" : 0.75,
+					"y" : 0
+				},
+				{
+					"x" : 1.25,
+					"y" : 0
+				},
+				{
+					"x" : 1.75,
+					"y" : 0
+				},
+				{
+					"x" : 2.25,
+					"y" : 0
+				},
+				{
+					"x" : 2.75,
+					"y" : 0
+				},
+				{
+					"x" : 3.25,
+					"y" : 0
+				},
+				{
+					"x" : 3.75,
+					"y" : 0
+				},
+				{
+					"x" : 4.25,
+					"y" : 0
+				},
+				{
+					"x" : 4.75,
+					"y" : 0
+				},
+				{
+					"x" : 5.25,
+					"y" : 0
+				},
+				{
+					"x" : 5.75,
+					"y" : 1
+				}
+			]
+		},
+		{
+			"key" : "Lowest Scoring Network",
+			"values" : [
+				{
+					"x" : 0.25,
+					"y" : 4
+				},
+				{
+					"x" : 0.75,
+					"y" : 0
+				},
+				{
+					"x" : 1.25,
+					"y" : 0
+				},
+				{
+					"x" : 1.75,
+					"y" : 0
+				},
+				{
+					"x" : 2.25,
+					"y" : 0
+				},
+				{
+					"x" : 2.75,
+					"y" : 0
+				},
+				{
+					"x" : 3.25,
+					"y" : 0
+				},
+				{
+					"x" : 3.75,
+					"y" : 0
+				},
+				{
+					"x" : 4.25,
+					"y" : 0
+				},
+				{
+					"x" : 4.75,
+					"y" : 0
+				},
+				{
+					"x" : 5.25,
+					"y" : 0
+				},
+				{
+					"x" : 5.75,
+					"y" : 1
+				}
+			]
+		}
+	],
+	"other_data" : [
+		{
+			"network_id" : 65,
+			"user_name" : "Bob",
+			"score_1" : 0.33,
+			"score_2" : -1,
+			"chance_val" : 30,
+			"popularity_val" : 98,
+			"age_val" : 22
+		},
+		{
+			"network_id" : 67,
+			"user_name" : "Steve",
+			"score_1" : 0.33,
+			"score_2" : 0,
+			"chance_val" : 20,
+			"popularity_val" : 30,
+			"age_val" : 100
+		},
+		{
+			"network_id" : 68,
+			"user_name" : "Steve",
+			"score_1" : 0.33,
+			"score_2" : 0,
+			"chance_val" : 56,
+			"popularity_val" : 30,
+			"age_val" : 100
+		}
+	],
+	"is_high" : [
+		true
+	]
+}

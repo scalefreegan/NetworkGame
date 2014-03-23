@@ -33,9 +33,16 @@ $("#go_network").click(function () {
             //debugger;
             $('#go_network').prop("disabled",true);
       		$("#go_network").text("loading")
+
       //       //here's where i need to run the r stuff
+  			if ($("#smallorlarge").is(':checked')) {
+		    	$("#speed").val("50%");
+		    } else {
+		    	filetoload = "./data/graph_small.json";
+		    	$("#speed").val("0%");
+		    }
             var req = ocpu.call("run", {
-		        n : 150,
+		        n : n_nodes,
 		        chance : parseInt($("#sl1").prop("value")), 
 		        popularity : parseInt($("#sl2").prop("value")),
 		        age : parseInt($("#sl3").prop("value")),
@@ -49,7 +56,7 @@ $("#go_network").click(function () {
 		        alert(jqXHR.responseText);
 		      });
 		    function datainfo(callback){
-		    	ocpu.rpc("writeJSON", {x : dataframe}, function(jsondata){
+		    	ocpu.rpc("writeJSON_graph", {x : dataframe}, function(jsondata){
 			      graph = jsondata;
 			      for (var i = 0; i<graph.other_data.length; i++) {
  						score1.push(graph.other_data[i].score_1);
@@ -71,8 +78,37 @@ $("#go_network").click(function () {
 			      alert(jqXHR.responseText);
 			    });
 		    }
-		    // $("#go_network").text("loaded")
-		    // doTour2(cityDataParse);
-            //
+		 //    var filetoload
+		 //    if ($("#smallorlarge").is(':checked')) {
+		 //    	filetoload = "./data/graph_large.json";
+		 //    } else {
+		 //    	filetoload = "./data/graph_small.json";
+		 //    	$("#speed").val("0%");
+		 //    }
+		 //    d3.json(filetoload, function(data) {
+		 //    	graph = data;
+		 //    	function draw() {
+		 //    		$("#go_network").text("loaded")
+		 //    		doTour2(cityDataParse);
+		 //    	}
+		 //    	function read(callback) {
+			// 	  for (var i = 0; i<graph.other_data.length; i++) {
+			// 	    score1.push(graph.other_data[i].score_1);
+			// 	    score1_nosort.push(graph.other_data[i].score_1);
+			// 	    score2.push(graph.other_data[i].score_2);
+			// 	    score2_nosort.push(graph.other_data[i].score_2);
+			// 	    chance.push(graph.other_data[i].chance_val);
+			// 	    popularity.push(graph.other_data[i].popularity_val);
+			// 	    age.push(graph.other_data[i].age_val);
+			// 	    if (i==graph.other_data.length-1) {
+			// 	      yours1 = graph.other_data[i].score_1
+			// 	      yours2 = graph.other_data[i].score_2
+			// 	    }
+			// 	  }
+			// 	  high_ind = score1.indexOf(Array.max(score1));
+			// 	  callback();
+		 //    	}
+			//  	read(draw);
+			// });
       });
 </script>

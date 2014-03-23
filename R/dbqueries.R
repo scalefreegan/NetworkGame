@@ -1,21 +1,31 @@
 # common database queries
-
-getHigh <- function(what,by,db="nihnetworks") {
+highScores <- function(what="user_name,score_1",order = "score_1", n=150,db="nihnetworks") {
 	require(RPostgreSQL)
 	drv <- dbDriver("PostgreSQL")
 	con <- dbConnect(drv, dbname=db)
-	query <- paste("select ", what, " from networks where ", by, " = (select max(", by ,") from networks)",sep="")
+	query <- paste("select ", what, " from networks WHERE n_node = ",n," ORDER BY ",order," DESC LIMIT 10",sep="")
+	result <- dbGetQuery(con,query)
+	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
+	dbUnloadDriver(drv)
+	return(list(result)[[1]])
+}
+
+getHigh <- function(what,by,db="nihnetworks",n=150) {
+	require(RPostgreSQL)
+	drv <- dbDriver("PostgreSQL")
+	con <- dbConnect(drv, dbname=db)
+	query <- paste("select ", what, " from networks where ", by, " = (select max(", by ,") from networks WHERE n_node = ",n,") AND n_node = ",n," LIMIT 1",sep="")
 	result <- dbGetQuery(con,query)
 	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 	dbUnloadDriver(drv)
 	return(list(result))
 }
 
-getLow <- function(what,by,db="nihnetworks") {
+getLow <- function(what,by,db="nihnetworks",n=150) {
 	require(RPostgreSQL)
 	drv <- dbDriver("PostgreSQL")
 	con <- dbConnect(drv, dbname=db)
-	query <- paste("select ", what, " from networks where ", by, " = (select min(", by ,") from networks)",sep="")
+	query <- paste("select ", what, " from networks where ", by, " = (select min(", by ,") from networks WHERE n_node = ",n,") AND n_node = ",n," LIMIT 1",sep="")
 	result <- dbGetQuery(con,query)
 	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 	dbUnloadDriver(drv)
@@ -33,24 +43,24 @@ getYours <- function(what,by="network_id",db="nihnetworks") {
 	return(list(result))
 }
 
-getAll <- function(what,db="nihnetworks") {
+getAll <- function(what,db="nihnetworks",n=150) {
 	require(RPostgreSQL)
 	drv <- dbDriver("PostgreSQL")
 	con <- dbConnect(drv, dbname=db)
-	query <- paste("select ", what, " from networks",sep="")
+	query <- paste("select ", what, " from networks where n_node =",n,sep="")
 	result <- dbGetQuery(con,query)
 	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 	dbUnloadDriver(drv)
 	return(list(result))
 }
 
-compileBasicStatsHist <- function(what,by,db="nihnetworks",hist=F,bins=20){
+compileBasicStatsHist <- function(what,by,db="nihnetworks",hist=F,bins=20,n=150){
 		# compile all vs your score for a measure
 		# format for JSON and plotting in nvd3
 		require(RPostgreSQL)
 		options(stringsAsFactors=FALSE)
-		high = as.numeric(sapply(getHigh(what,by)[[1]][[1]],strsplit,split=",")[[1]])
-		low = as.numeric(sapply(getLow(what,by)[[1]][[1]],strsplit,split=",")[[1]])
+		high = as.numeric(sapply(getHigh(what,by,n=n)[[1]][[1]],strsplit,split=",")[[1]])
+		low = as.numeric(sapply(getLow(what,by,n=n)[[1]][[1]],strsplit,split=",")[[1]])
 		yours = as.numeric(sapply(getYours(what)[[1]],strsplit,split=",")[[1]])
 		x <- seq(min(high,low,yours),max(high,low,yours),1)
 		# format vals

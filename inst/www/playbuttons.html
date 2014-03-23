@@ -37,10 +37,22 @@
 		linkViewOn();
 	});
 	$("#speed_up").click(function(){
-		$("#speed").val(parseInt($("#speed").val())+5+"%");
+		$("#speed").val(function(d){
+			if(parseInt($("#speed").val())<100){
+				return parseInt($("#speed").val())+5+"%";
+			} else {
+				return parseInt($("#speed").val())+"%";
+			}
+		});
 	});
 	$("#speed_down").click(function(){
-		$("#speed").val(parseInt($("#speed").val())-5+"%");
+		$("#speed").val(function(d){
+			if(parseInt($("#speed").val())>0){
+				return parseInt($("#speed").val())-5+"%";
+			} else {
+				return parseInt($("#speed").val())+"%";
+			}
+		});
 	});
 	$("#first").click(function(){
 		window.index_g = 0;

@@ -2,12 +2,47 @@
   <div class="jumbotron" id="jumbotron">
   </div>
   <div class="row marketing" id = "bottom_row">
+  	<marquee behavior="scroll" direction="left" scrollamount="1" id="m_scroll"></marquee>
   </div>
 
   <div class="footer">
-    <p>&copy; Aaron Brooks 2014</p>
+    <p>&copy; <a href="http://www.aaron-brooks.org">Aaron Brooks</a> 2014 
+    	<a href="./"><span class="glyphicon glyphicon-user pull-right"></span></a>
+    	<a><span class="pull-right">&nbsp&nbsp&nbsp&nbsp</span></a>
+    	<a href="./"><span class="glyphicon glyphicon-home pull-right"></span></a>
+
+    </p>
   </div>
 
 </div> <!-- /container -->
 <script type="text/javascript" src="./scripts/draw_network.js"></script>
+<script>
+	var marqueeText;
+	function marqueeIt(){
+		$('marquee').marquee();
+	}
+	function updateMarquee(val,callback) {
+		$("marquee").html(val);
+		callback();
+	}
+	// marqueeText = "<b>Top scores:</b> <span class='badge alert-danger'>1</span> Sam <span class='badge alert-white'>0.929948</span> <span class='badge alert-warning'>2</span> Big Al <span class='badge alert-white'>0.903871</span> <span class='badge alert-info'>3</span> Joe <span class='badge alert-white'>0.816953</span> <span class='badge'>4</span> Friend <span class='badge'>5</span> Stan <span class='badge'>6</span> Shane <span class='badge'>7</span> Friend <span class='badge'>8</span> ADD <span class='badge'>9</span> Sheena <span class='badge'>10</span> A";
+	// updateMarquee(marqueeText,marqueeIt);
+	var req = ocpu.call("highScores", {
+      }, function(session){
+        dataframe = session;
+        datainfo(updateMarquee);
+      }).fail(function(jqXHR){
+        alert(jqXHR.responseText);
+      });
+    function datainfo(callback){
+    	ocpu.rpc("writeJSON_topscores", {x : dataframe}, function(jsondata){
+	      marqueeText = jsondata;
+	      callback(marqueeText,marqueeIt);
+	    }).fail(function(jqXHR){
+	      alert(jqXHR.responseText);
+	    });
+    }
+	
+	
+</script>
 
