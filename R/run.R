@@ -64,10 +64,10 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 	} else {
 		to.r$is_high = F
 	}
-	if (dim(to.r$g3data)[1]>50) {
+	if (dim(to.r$g3data)[1]>100) {
 		highInd = which(to.r$g3data[,"score_1"]==max(to.r$g3data[,"score_1"]))
 		lowInd = which(to.r$g3data[,"score_1"]==min(to.r$g3data[,"score_1"]))
-		sampledInd = sample(seq(1,dim(to.r$g3data)[1]),50)
+		sampledInd = sample(seq(1,dim(to.r$g3data)[1]),100)
 		to.r$g3data = to.r$g3data[sort(unique(c(highInd,lowInd,sampledInd,dim(to.r$g3data)[1]))),]
 	}
 	# writeToJSON <- function(x,filename) {

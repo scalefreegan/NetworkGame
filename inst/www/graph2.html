@@ -5,19 +5,21 @@
 <div class="row">
   <div class="col-md-12" style="text-align:center;margin-bottom: 40px;">
     <div class="btn-group" style="bottom:25px; left:25px">
+      <button type="button" class="btn btn-default btn-md" style="font-size:10px;padding: 5px 5px" id="hist_zoom-out"><span class="glyphicon glyphicon-zoom-out"></span></button>
       <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" style="font-size:10px;padding: 5px 24px">Option <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
         <li><a class="button-sub" id = "g2_s1">Degree (Connectedness)</a></li>
         <li><a class="button-sub" id = "g2_s2">Betweeness</a></li>
       </ul>
+      <button type="button" class="btn btn-default btn-md" style="font-size:10px;padding: 5px 5px" id="hist_zoom-in"><span class="glyphicon glyphicon-zoom-in"></span></button>
     </div>
   </div>
 </div>
 
 <script>
-
+var histzoom = 100;
 //g2_data = g2_exampleData(3);
-$("#graph2 button").html("Degree (Connectedness) <span class='caret'></span>")
+$("#graph2 .dropdown-toggle").html("Degree (Connectedness) <span class='caret'></span>")
 $("#graph2 .button-sub").click(function(){
   $("#graph2 button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>");
   if (this.getAttribute("id")=="g2_s1") {
@@ -26,6 +28,54 @@ $("#graph2 .button-sub").click(function(){
       //debugger;
       drawGraph2(graph.betweenness);
     }
+});
+$("#hist_zoom-in").click(function(){
+  if (histzoom>25) {
+    histzoom=histzoom-25
+    if ($("#graph2 .dropdown-toggle").text()=="Degree (Connectedness) ") {
+      var tmp = [{key:'Your Network',values:[]},{key:'Highest Scoring Network',values:[]},{key:'Lowest Scoring Network',values:[]}];
+      for (var i = 0; i < graph.degree.length; i++) {
+        var lim = Math.ceil(graph.degree[i].values.length*(histzoom/100))
+        for (var j = 0; j < lim; j++) {
+          tmp[i].values.push(graph.degree[i].values[j])
+        }
+      }
+      drawGraph2(tmp);
+    } else if ($("#graph2 .dropdown-toggle").text()=="Betweeness ") {
+      var tmp = [{key:'Your Network',values:[]},{key:'Highest Scoring Network',values:[]},{key:'Lowest Scoring Network',values:[]}];
+      for (var i = 0; i < graph.betweenness.length; i++) {
+        var lim = Math.ceil(graph.betweenness[i].values.length*(histzoom/100))
+        for (var j = 0; j < lim; j++) {
+          tmp[i].values.push(graph.betweenness[i].values[j])
+        }
+      }
+      drawGraph2(tmp);
+    }
+  }
+});
+$("#hist_zoom-out").click(function(){
+  if (histzoom<100) {
+    histzoom=histzoom+25
+    if ($("#graph2 .dropdown-toggle").text()=="Degree (Connectedness) ") {
+      var tmp = [{key:'Your Network',values:[]},{key:'Highest Scoring Network',values:[]},{key:'Lowest Scoring Network',values:[]}];
+      for (var i = 0; i < graph.degree.length; i++) {
+        var lim = Math.ceil(graph.degree[i].values.length*(histzoom/100))
+        for (var j = 0; j < lim; j++) {
+          tmp[i].values.push(graph.degree[i].values[j])
+        }
+      }
+      drawGraph2(tmp);
+    } else if ($("#graph2 .dropdown-toggle").text()=="Betweeness ") {
+      var tmp = [{key:'Your Network',values:[]},{key:'Highest Scoring Network',values:[]},{key:'Lowest Scoring Network',values:[]}];
+      for (var i = 0; i < graph.betweenness.length; i++) {
+        var lim = Math.ceil(graph.betweenness[i].values.length*(histzoom/100))
+        for (var j = 0; j < lim; j++) {
+          tmp[i].values.push(graph.betweenness[i].values[j])
+        }
+      }
+      drawGraph2(tmp);
+    }
+  }
 });
 
 </script>

@@ -172,10 +172,13 @@ function doTour1() {
           title: "Welcome to the Network<i>Challenge</i>!",
           content: "What's your name? <br><input class='form-control' type='text' name='your_name'>",
           onNext : function(tour){
-              debugger;
-              var nameProvided = $("input[name=your_name]").profanityFilter({
-                externalSwears: './data/badwords.json'
-              }).val();
+              //debugger;
+              var nameProvided = $("input[name=your_name]").val();
+              $("#hidden").text(nameProvided);
+              nameProvided = $("#hidden").profanityFilter({
+                externalSwears: './data/badwords.json',
+                replaceWith: ' '
+              }).text();
               if ($.trim(nameProvided) !== ""){
                   userName = nameProvided;
               }
@@ -349,11 +352,38 @@ function start(where,cities,graph) {
           var tmpcircles = d3.selectAll("circle");
           tmpcircles[[0]].forEach(function(d){lastCircleColors[d.id]=d.style.fill});
           tmpcircles[[0]].forEach(function(d){lastCircleR[d.id]=d.getAttribute("r")});
-          bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
+          if (graph.is_high[0]==false) {
+            bootbox.dialog({
+              message: "<p>Way to go <b>" + userName + "</b>, you have a high score. Awesome!</p><p><img src='./data/bump.png' width=75%></p>",
+              title: "CONGRATULATIONS!",
+              onEscape: function() {
+                bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
+                  $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
+                  $("#playbuttons").load("playbuttons.html");
+                  linkViewOn();
+                }); 
+              },
+              buttons: {
+                success: {
+                  label: "Sweet!",
+                  className: "btn-danger",
+                  callback: function() {
+                    bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
+                      $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
+                      $("#playbuttons").load("playbuttons.html");
+                      linkViewOn();
+                    }); 
+                  }
+                }
+              }
+            });
+          } else {
+            bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
               $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
               $("#playbuttons").load("playbuttons.html");
               linkViewOn();
             }); 
+          }
         } else {
           clearTimeout(t);
         }
@@ -510,17 +540,20 @@ function cityDataParse(where,callback) {
     for (var node in cityNetwork) {
       countByNode.push([node,cityNetwork[node].count]);
     }
+    countByNode=countByNode.slice(0,cityNetwork.length);
+    //debugger;
     countByNode.sort(function(a, b) {return b[1] - a[1]});
     // add city,lat,long,etc
     var index = 0;
     countByNode.forEach(function(node){
+      //console.log(index);
       cityNetwork[parseInt(node[0])].city = cities[index].AccentCity + " " + cities[index].Region;
       cityNetwork[parseInt(node[0])].latitude = cities[index].Latitude;
       cityNetwork[parseInt(node[0])].longitude = cities[index].Longitude;
       cityNetwork[parseInt(node[0])].population = cities[index].Population;
       // add city population to countByCity
       countByCity[cities[index].AccentCity + " " + cities[index].Region] = cities[index].Population;
-      index=index+1
+      index=index+1;
       var location = [+cityNetwork[parseInt(node[0])].longitude, +cityNetwork[parseInt(node[0])].latitude];
       locationByCity[cityNetwork[parseInt(node[0])].city] = location;
       positions.push(projection(location));
