@@ -172,7 +172,10 @@ function doTour1() {
           title: "Welcome to the Network<i>Challenge</i>!",
           content: "What's your name? <br><input class='form-control' type='text' name='your_name'>",
           onNext : function(tour){
-              var nameProvided = $("input[name=your_name]").val();
+              debugger;
+              var nameProvided = $("input[name=your_name]").profanityFilter({
+                externalSwears: './data/badwords.json'
+              }).val();
               if ($.trim(nameProvided) !== ""){
                   userName = nameProvided;
               }
