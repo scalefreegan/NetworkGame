@@ -26,23 +26,23 @@
 		$("marquee").html(val);
 		callback();
 	}
-	marqueeText = "<b>Top scores:</b> <span class='badge alert-danger'>1</span> Sam <span class='badge alert-white'>0.929948</span> <span class='badge alert-warning'>2</span> Big Al <span class='badge alert-white'>0.903871</span> <span class='badge alert-info'>3</span> Joe <span class='badge alert-white'>0.816953</span> <span class='badge'>4</span> Friend <span class='badge'>5</span> Stan <span class='badge'>6</span> Shane <span class='badge'>7</span> Friend <span class='badge'>8</span> ADD <span class='badge'>9</span> Sheena <span class='badge'>10</span> A";
-	updateMarquee(marqueeText,marqueeIt);
-	// var req = ocpu.call("highScores", {
- //      }, function(session){
- //        dataframe = session;
- //        datainfo(updateMarquee);
- //      }).fail(function(jqXHR){
- //        alert(jqXHR.responseText);
- //      });
- //    function datainfo(callback){
- //    	ocpu.rpc("writeJSON_topscores", {x : dataframe}, function(jsondata){
-	//       marqueeText = jsondata.topscores;
-	//       callback(marqueeText,marqueeIt);
-	//     }).fail(function(jqXHR){
-	//       alert(jqXHR.responseText);
-	//     });
-    //}
+	// marqueeText = "<b>Top scores:</b> <span class='badge alert-danger'>1</span> Sam <span class='badge alert-white'>0.929948</span> <span class='badge alert-warning'>2</span> Big Al <span class='badge alert-white'>0.903871</span> <span class='badge alert-info'>3</span> Joe <span class='badge alert-white'>0.816953</span> <span class='badge'>4</span> Friend <span class='badge'>5</span> Stan <span class='badge'>6</span> Shane <span class='badge'>7</span> Friend <span class='badge'>8</span> ADD <span class='badge'>9</span> Sheena <span class='badge'>10</span> A";
+	// updateMarquee(marqueeText,marqueeIt);
+	var req = ocpu.call("highScores", {
+      }, function(session){
+        dataframe = session;
+        datainfo(updateMarquee);
+      }).fail(function(jqXHR){
+        alert(jqXHR.responseText);
+      });
+    function datainfo(callback){
+    	ocpu.rpc("writeJSON_topscores", {x : dataframe}, function(jsondata){
+	      marqueeText = jsondata.topscores;
+	      callback(marqueeText,marqueeIt);
+	    }).fail(function(jqXHR){
+	      alert(jqXHR.responseText);
+	    });
+    }
 	
 	
 </script>
