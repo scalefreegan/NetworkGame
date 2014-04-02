@@ -16,7 +16,7 @@ runGame <- function(g,nRuns) {
           game.r$startstop <- c(game.r$start.stop,paste(test.v,collapse=" "))
           #print(c(test.v[1],test.v[2]))
           game.r$paths<-c(game.r$paths,
-            paste(V(g.mod)$names[get.shortest.paths(g.mod,which(V(g.mod)$names==test.v[1]),which(V(g.mod)$names==test.v[2]))[[1]]],collapse=" "))
+            paste(V(g.mod)$names[get.shortest.paths(g.mod,which(V(g.mod)$names==test.v[1]),which(V(g.mod)$names==test.v[2]))[[1]][[1]]],collapse=" "))
           # ATTACK THE NETWORK
           node.removed <- sample(V(g.mod)$names,size=1)
           game.r$removed <- c(game.r$removed,node.removed)
