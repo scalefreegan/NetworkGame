@@ -30,8 +30,8 @@ $("#graph2 .button-sub").click(function(){
     }
 });
 $("#hist_zoom-in").click(function(){
-  if (histzoom>25) {
-    histzoom=histzoom-25
+  if (histzoom>10) {
+    histzoom=histzoom-10
     if ($("#graph2 .dropdown-toggle").text()=="Degree (Connectedness) ") {
       var tmp = [{key:'Your Network',values:[]},{key:'Highest Scoring Network',values:[]},{key:'Lowest Scoring Network',values:[]}];
       for (var i = 0; i < graph.degree.length; i++) {
@@ -55,7 +55,7 @@ $("#hist_zoom-in").click(function(){
 });
 $("#hist_zoom-out").click(function(){
   if (histzoom<100) {
-    histzoom=histzoom+25
+    histzoom=histzoom+10
     if ($("#graph2 .dropdown-toggle").text()=="Degree (Connectedness) ") {
       var tmp = [{key:'Your Network',values:[]},{key:'Highest Scoring Network',values:[]},{key:'Lowest Scoring Network',values:[]}];
       for (var i = 0; i < graph.degree.length; i++) {

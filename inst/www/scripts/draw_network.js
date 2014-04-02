@@ -352,7 +352,7 @@ function start(where,cities,graph) {
           var tmpcircles = d3.selectAll("circle");
           tmpcircles[[0]].forEach(function(d){lastCircleColors[d.id]=d.style.fill});
           tmpcircles[[0]].forEach(function(d){lastCircleR[d.id]=d.getAttribute("r")});
-          if (graph.is_high[0]==false) {
+          if (graph.is_high[0]==true) {
             bootbox.dialog({
               message: "<p>Way to go <b>" + userName + "</b>, you have a high score. Awesome!</p><p><img src='./data/bump.png' width=75%></p>",
               title: "CONGRATULATIONS!",
