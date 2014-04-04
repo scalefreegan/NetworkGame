@@ -22,7 +22,7 @@ var zoomint = 5;
 //g2_data = g2_exampleData(3);
 $("#graph2 .dropdown-toggle").html("Degree (Connectedness) <span class='caret'></span>")
 $("#graph2 .button-sub").click(function(){
-  $("#graph2 button").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>");
+  $("#graph2 button.dropdown-toggle").filter(this.parentNode.parentNode.parentNode.children).html(this.text + " <span class='caret'></span>");
   if (this.getAttribute("id")=="g2_s1") {
       drawGraph2(graph.degree);
     } else if (this.getAttribute("id")=="g2_s2") {
