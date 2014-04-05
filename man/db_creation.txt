@@ -1,0 +1,17 @@
+# db name = nihnetworks
+# user = nih
+
+CREATE TABLE networks (
+	network_id serial PRIMARY KEY,
+	network_date timestamp NOT NULL DEFAULT now(),
+	user_name varchar(100) NOT NULL,
+	n_node smallint,
+	chance_val float (5),
+	popularity_val float (5),
+	age_val float (5),
+	score_1 float (20),
+	score_2 float (20),
+	degree_dist varchar (100000),
+	betweenness varchar (100000),
+	network varchar (100000)	
+);
