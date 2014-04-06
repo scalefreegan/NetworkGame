@@ -243,6 +243,40 @@ function doTour1() {
       tour.start();
 }
 
+function doTour1_alt() {
+      userName = "Friend"
+      var tour = new Tour({
+          storage : false,
+          onEnd : function(tour) {$("#go_network").prop("disabled",false)},
+          template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation md-span-6' style='padding-bottom: 40px;'><button class='btn btn-default' data-role='end'>Ok</button></div></div>",
+      });
+   
+      tour.addSteps([
+        {
+          element: "#TX",
+          placement: "top",
+          title: "Welcome to the Network<i>Challenge</i>!",
+          content: "What's your name? <br><input class='form-control' type='text' name='your_name'>",
+          onNext : function(tour){
+              //debugger;
+              var nameProvided = $("input[name=your_name]").val();
+              $("#hidden").text(nameProvided);
+              nameProvided = $("#hidden").profanityFilter({
+                externalSwears: './data/badwords.json',
+                replaceWith: ' '
+              }).text();
+              if ($.trim(nameProvided) !== ""){
+                  userName = nameProvided;
+              }
+            }
+        }]);
+      // Initialize the tour
+      tour.init();
+   
+      // Start the tour
+      tour.start();
+    }
+
 function doTour2(callback) {
       var tour = new Tour({
           storage : false,
@@ -314,7 +348,13 @@ function doTour3(callback) {
       
 }
 
-drawStates(function(){doTour1()});
+drawStates(function(){
+  if (showTour == true) {
+    doTour1();
+  } else if (showTour == false) {
+    doTour1_alt();
+  }
+});
 
 function start(where,cities,graph) { 
       //debugger;
@@ -349,40 +389,44 @@ function start(where,cities,graph) {
             startDraw();
           },t_time); 
         } else if (run==true && index_g==graph.names.length+1){
-          var tmpcircles = d3.selectAll("circle");
-          tmpcircles[[0]].forEach(function(d){lastCircleColors[d.id]=d.style.fill});
-          tmpcircles[[0]].forEach(function(d){lastCircleR[d.id]=d.getAttribute("r")});
-          if (graph.is_high[0]==true) {
-            bootbox.dialog({
-              message: "<p>Way to go <b>" + userName + "</b>, you have a high score. Awesome!</p><p><img src='./data/bump.png' width=75%></p>",
-              title: "CONGRATULATIONS!",
-              onEscape: function() {
-                bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
-                  $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
-                  $("#playbuttons").load("playbuttons.html");
-                  linkViewOn();
-                }); 
-              },
-              buttons: {
-                success: {
-                  label: "Sweet!",
-                  className: "btn-danger",
-                  callback: function() {
-                    bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
-                      $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
-                      $("#playbuttons").load("playbuttons.html");
-                      linkViewOn();
-                    }); 
+          if (demoMode == false) {
+            var tmpcircles = d3.selectAll("circle");
+            tmpcircles[[0]].forEach(function(d){lastCircleColors[d.id]=d.style.fill});
+            tmpcircles[[0]].forEach(function(d){lastCircleR[d.id]=d.getAttribute("r")});
+            if (graph.is_high[0]==true) {
+              bootbox.dialog({
+                message: "<p>Way to go <b>" + userName + "</b>, you have a high score. Awesome!</p><p><img src='./data/bump.png' width=75%></p>",
+                title: "CONGRATULATIONS!",
+                onEscape: function() {
+                  bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
+                    $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
+                    $("#playbuttons").load("playbuttons.html");
+                    linkViewOn();
+                  }); 
+                },
+                buttons: {
+                  success: {
+                    label: "Sweet!",
+                    className: "btn-danger",
+                    callback: function() {
+                      bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
+                        $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
+                        $("#playbuttons").load("playbuttons.html");
+                        linkViewOn();
+                      }); 
+                    }
                   }
                 }
-              }
-            });
-          } else {
-            bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
-              $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
-              $("#playbuttons").load("playbuttons.html");
-              linkViewOn();
-            }); 
+              });
+            } else {
+              bootbox.alert("<p><b>" + userName + "</b>, your network is ready!</p><p>You can see how your network performed or watch a simulation of your network's performance.</p><p>If you want to try again, click <span style='color:steelblue'><em>Try again</em></span>. To see a simulation of your network's performance click <span style='color:grey'><em>Simulation</em></span>", function() {
+                $("#right_panel").append($("<div class='col-md-12'>").load("score_button.html"));
+                $("#playbuttons").load("playbuttons.html");
+                linkViewOn();
+              }); 
+            }
+          } else if (demoMode == true) {
+            clearGraph(start);
           }
         } else {
           clearTimeout(t);

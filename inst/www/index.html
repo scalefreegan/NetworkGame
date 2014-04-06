@@ -35,7 +35,7 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-48297215-1', 'systemsbiology.net');
+      ga('create', 'UA-49737566-1', 'systemsbiology.net');
       ga('send', 'pageview');
 
     </script>
@@ -188,14 +188,42 @@
       </div>
 
       <div class="footer">
-        <p>&copy; <a href="http://www.aaron-brooks.org">Aaron Brooks</a> 2014</p>
+        <div class="col-md-4">
+          <p>&copy; <a href="http://www.aaron-brooks.org">Aaron Brooks</a> 2014</p>
+        </div>
+        <div class="col-md-4">
+          <p></p>
+        </div>
+        <div class="col-md-2">
+          
+        </div>
+        <div class="col-md-2">
+          <label class="pull-left"><input type="checkbox" class="checkbox" id="tour" value="Tour"/> Tour</label>
+          <label class="pull-right"><input type="checkbox" class="checkbox" id="demo" value="Demo"/> Demo</label>
+        </div>
       </div>
 
     </div> <!-- /container -->
     <script type="text/javascript">
       $(document).ready(function(){
+          showTour = false;
+          demoMode = false;
           $("#go").click(function (e) {
             $("body").load("game.html");
+          });
+          $("#tour").click(function (e) {
+            if ($("#tour").is(':checked') == false) {
+              showTour = false;
+            } else if ($("#tour").is(':checked') == true) {
+              showTour = true;
+            }
+          });
+          $("#demo").click(function (e) {
+            if ($("#demo").is(':checked') == false) {
+              demoMode = false;
+            } else if ($("#demo").is(':checked') == true) {
+              demoMode = true;
+            }
           });
           $("#go").qtip({ // Grab some elements to apply the tooltip to
               content: 'Click here',
