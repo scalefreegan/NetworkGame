@@ -59,7 +59,7 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 	to.r$betweenness <- compileBasicStatsHist("betweenness",by="score_1",hist=T,bins=breaks,n=n)
 	# data for graph3
 	to.r$g3data <- getAll("network_id,user_name,score_1,score_2,chance_val,popularity_val,age_val",n=n)[[1]]
-	if (to.r$g3data[dim(to.r$g3data)[1],"score_1"]>=max(to.r$g3data[,"score_1"])) {
+	if (to.r$g3data[dim(to.r$g3data)[1],"score_1"]>sort(getAll("score_1",n=150)[[1]][,1],decreasing=T)[10]) {
 		to.r$is_high = T
 	} else {
 		to.r$is_high = F
