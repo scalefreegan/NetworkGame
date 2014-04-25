@@ -184,7 +184,7 @@ function doTour1() {
               }
             }
         },
-        {
+        /*{
           element: "#CA",
           placement: "right",
           title: function(){ return "Congratulations, <b>" + userName + "</b>!"; },
@@ -233,7 +233,7 @@ function doTour1() {
           backdrop: false,
           title: "When you're ready...",
           content: "<p>Press this button.</p><p>After building a network according to your specifications, I will score it.</p><p>The more <b>robust</b> the <b>better</b>.</p> "
-        },
+        },*/
       ]);
    
      // Initialize the tour
