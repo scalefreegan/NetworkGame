@@ -52,7 +52,7 @@ getAll <- function(what,db="nihnetworks",n=150) {
 	require(RPostgreSQL)
 	drv <- dbDriver("PostgreSQL")
 	con <- dbConnect(drv, dbname=db)
-	query <- paste("select ", what, " from networks where n_node =",n,sep="")
+	query <- paste("select ", what, " from networks where n_node =",n,"ORDER BY network_id",sep="")
 	result <- dbGetQuery(con,query)
 	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 	dbUnloadDriver(drv)
