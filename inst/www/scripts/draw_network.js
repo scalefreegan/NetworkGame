@@ -44,7 +44,7 @@ $("#left_panel").append($("<div id='div_option2'>").load("option2.html"));
 $("#left_panel").append($("<div id='div_option3'>").load("option3.html"));
 
 //$("#left_panel").append($("<div id='div_option3'>").load("option4.html"));
-n_nodes = 150;
+
 $("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("submit_button.html"));
 
 // separate the columns
@@ -60,6 +60,7 @@ var w = parseInt(parseInt($("#right_panel").css("width"))*.8),
     h = parseInt(w/1.6),
     w_opt = parseInt(w/1000),
     h_opt = parseInt(w/1000);
+    n_nodes = 150;;
     // w = 1280, 1140
     // h = 800; 712.5
 
