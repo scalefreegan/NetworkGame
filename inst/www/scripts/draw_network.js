@@ -60,7 +60,7 @@ var w = parseInt(parseInt($("#right_panel").css("width"))*.8),
     h = parseInt(w/1.6),
     w_opt = parseInt(w/1000),
     h_opt = parseInt(w/1000);
-    n_nodes = 150;;
+    n_nodes = 150;
     // w = 1280, 1140
     // h = 800; 712.5
 

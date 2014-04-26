@@ -42,7 +42,8 @@ $("#go_network").click(function () {
 			    	$("#speed").val("0%");
 			    }
             var req = ocpu.call("run", {
-		        n : n_nodes,
+		        //n : n_nodes,
+		        n : 150,
 		        chance : parseInt($("#sl1").prop("value")), 
 		        popularity : parseInt($("#sl2").prop("value")),
 		        age : parseInt($("#sl3").prop("value")),
