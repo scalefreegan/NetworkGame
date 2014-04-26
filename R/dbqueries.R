@@ -3,7 +3,7 @@ highScores <- function(what="user_name,score_1",order = "score_1", n=150,db="nih
 	require(RPostgreSQL)
 	drv <- dbDriver("PostgreSQL")
 	con <- dbConnect(drv, dbname=db)
-	query <- paste("select ", what, " from networks WHERE n_node = ",n," AND network_date > (NOW() - INTERVAL '12 hour') AND score_1 > 0.8 ORDER BY ",order," DESC LIMIT 25",sep="")
+	query <- paste("select ", what, " from networks WHERE n_node = ",n," AND network_date > (NOW() - INTERVAL '3 hour') AND score_1 > 0.8 ORDER BY ",order," DESC LIMIT 25",sep="")
 	result <- dbGetQuery(con,query)
 	lapply(dbListConnections(drv),function(i)dbDisconnect(i))
 	dbUnloadDriver(drv)
