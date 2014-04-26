@@ -170,7 +170,7 @@ function doTour1() {
           element: "#TX",
           placement: "top",
           title: "Welcome to the Network<i>Challenge</i>!",
-          content: "What's your name? <br><input class='form-control' type='text' name='your_name'>",
+          content: "What's your nickname or initials? <br><input class='form-control' type='text' name='your_name'>",
           onNext : function(tour){
               //debugger;
               var nameProvided = $("input[name=your_name]").val();
@@ -182,7 +182,10 @@ function doTour1() {
               if ($.trim(nameProvided) !== ""){
                   userName = nameProvided;
               }
-            }
+            },
+          onShown : function(tour) {
+            $("button[data-role='end']").hide()
+          }
         },
         {
           element: "#CA",
