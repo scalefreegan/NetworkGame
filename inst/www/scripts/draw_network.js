@@ -43,7 +43,7 @@ $("#left_panel").append($("<div id='div_option2'>").load("option2.html"));
 
 $("#left_panel").append($("<div id='div_option3'>").load("option3.html"));
 
-$("#left_panel").append($("<div id='div_option3'>").load("option4.html"));
+//$("#left_panel").append($("<div id='div_option3'>").load("option4.html"));
 
 $("#left_panel").append($("<div id='left_panel_r4' style='padding:20px'>").load("submit_button.html"));
 
