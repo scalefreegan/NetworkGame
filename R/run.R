@@ -28,8 +28,8 @@ run <- function(n,chance,popularity,age,nRuns,uName,breaks) {
 	# L.C. Freeman. A set of measures of centrality based on betweenness. Sociometry, 40 (1) (1977), pp. 35–41
 	
 	to.r$links <- makeAdjacencyMatrix(to.r$g)
-	to.r$graph.tor <- paste(paste(to.r$links[,1],to.r$links[,2],sep=","),collapse=";")
-
+	#to.r$graph.tor <- paste(paste(to.r$links[,1],to.r$links[,2],sep=","),collapse=";")
+	to.r$graph.tor <- ""
 	# connect and write to database
 	drv <- dbDriver("PostgreSQL")
 	con <- dbConnect(drv, dbname="nihnetworks")
